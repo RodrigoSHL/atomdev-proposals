@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Propuesta de implementación de una plataforma de gestión de soportes e incidencias.">
+  <title>Plataforma de Gestión de Soportes e Incidencias · AtomDev</title>
+  <style>
+    :root {
+      --ink: #5f6062;
+      --ink-deep: #45474a;
+      --ink-soft: #77797d;
+      --paper: #fafbfc;
+      --surface: #fff;
+      --line: #e1e5e8;
+      --teal: #08aabd;
+      --teal-dark: #007d91;
+      --teal-light: #e1f7fa;
+      --pink: #ff0a5c;
+      --pink-dark: #c90047;
+      --pink-light: #ffe5ee;
+      --shadow: 0 20px 55px rgba(75, 76, 78, .12);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, a:focus-visible, summary:focus-visible {
+      outline: 3px solid rgba(8, 170, 189, .24);
+      outline-offset: 3px;
+    }
+    .site-shell { min-height: 100vh; overflow: hidden; }
+    .topbar {
+      position: sticky; z-index: 50; top: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 76px; padding: 12px clamp(22px, 5vw, 76px);
+      border-bottom: 1px solid rgba(225, 229, 232, .9);
+      background: rgba(250, 251, 252, .94); backdrop-filter: blur(16px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+    .brand-mark { display: grid; width: 46px; height: 46px; place-items: center; }
+    .brand-mark svg { display: block; width: 46px; height: 46px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 20px; font-weight: 600; letter-spacing: -.03em; }
+    .brand small { margin-top: 1px; color: var(--ink-soft); font-size: 12px; }
+    .top-actions, .top-nav { display: flex; align-items: center; gap: 8px; }
+    .top-nav { margin-right: 10px; }
+    .top-nav a { padding: 8px 9px; color: var(--ink-soft); font-size: 12px; text-decoration: none; }
+    .top-nav a:hover { color: var(--teal-dark); }
+    .button {
+      min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px;
+      background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+    }
+    .button:hover { transform: translateY(-1px); border-color: #b9c1c5; }
+    .button-primary { border-color: var(--teal); background: var(--teal); color: #fff; }
+    .button-primary:hover { border-color: var(--teal-dark); background: var(--teal-dark); }
+    .button-pink { border-color: var(--pink); background: var(--pink); color: #fff; }
+    .button-pink:hover { border-color: var(--pink-dark); background: var(--pink-dark); }
+    .button-ghost { border-color: transparent; background: transparent; }
+    .button-small { min-height: 36px; padding-inline: 13px; font-size: 12px; }
+
+    .hero {
+      position: relative; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+      gap: clamp(38px, 8vw, 105px); align-items: end; min-height: 620px;
+      padding: clamp(82px, 11vw, 145px) clamp(22px, 7vw, 108px) clamp(72px, 9vw, 110px);
+      background: radial-gradient(circle at 84% 20%, rgba(255, 10, 92, .12), transparent 28%),
+        radial-gradient(circle at 10% 86%, rgba(8, 170, 189, .12), transparent 33%), var(--paper);
+    }
+    .hero::before { position: absolute; top: 65px; right: 7vw; width: 170px; height: 170px; border: 1px solid rgba(8, 170, 189, .2); border-radius: 50%; content: ""; }
+    .hero::after { position: absolute; top: 108px; right: calc(7vw + 42px); width: 82px; height: 82px; border-radius: 50%; background: rgba(255, 10, 92, .12); content: ""; }
+    .hero-copy, .hero-card { position: relative; z-index: 1; }
+    .hero-copy { max-width: 900px; }
+    .eyebrow, .section-kicker {
+      color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700;
+      letter-spacing: .12em;
+    }
+    .hero h1 { max-width: 920px; margin: 18px 0 24px; color: var(--ink-deep); font-size: clamp(46px, 6.5vw, 86px); font-weight: 500; letter-spacing: -.055em; line-height: .97; }
+    .hero-copy > p { max-width: 730px; margin: 0; color: var(--ink-soft); font-size: clamp(19px, 2vw, 25px); line-height: 1.45; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .hero-tags span { padding: 9px 12px; border: 1px solid rgba(8, 170, 189, .25); border-radius: 999px; background: rgba(255,255,255,.72); color: var(--teal-dark); font-size: 12px; font-weight: 600; }
+    .hero-card { padding: 28px; border-top: 4px solid var(--pink); background: var(--surface); box-shadow: var(--shadow); }
+    .hero-card > span, .hero-card > small { display: block; color: var(--ink-soft); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+    .hero-card h2 { margin: 12px 0 6px; color: var(--ink-deep); font-size: clamp(30px, 3.8vw, 50px); font-weight: 500; letter-spacing: -.045em; line-height: 1; }
+    .hero-card p { margin: 22px 0 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+    .hero-card-rule { height: 1px; margin: 20px 0; background: var(--line); }
+    .hero-card .accent { color: var(--pink); font-weight: 700; }
+
+    .content-section { padding: clamp(76px, 10vw, 132px) clamp(22px, 7vw, 108px); border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: flex-start; gap: 18px; max-width: 900px; margin-bottom: clamp(40px, 6vw, 68px); }
+    .section-number { display: grid; flex: none; width: 48px; height: 48px; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal-dark); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .section-heading h2 { margin: 6px 0 0; color: var(--ink-deep); font-size: clamp(30px, 4vw, 48px); font-weight: 500; letter-spacing: -.04em; }
+    .section-heading p { margin: 12px 0 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+
+    .overview-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, .8fr); gap: clamp(28px, 7vw, 88px); align-items: start; }
+    .overview-copy { max-width: 700px; }
+    .overview-copy p { margin: 0; color: var(--ink-soft); font-size: 20px; line-height: 1.6; }
+    .overview-copy strong { color: var(--ink-deep); }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .metric { min-height: 132px; padding: 20px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .metric:nth-child(2), .metric:nth-child(4) { border-top-color: var(--pink); }
+    .metric strong { display: block; color: var(--ink-deep); font-size: 38px; font-weight: 500; letter-spacing: -.06em; }
+    .metric span { display: block; margin-top: 7px; color: var(--ink-soft); font-size: 13px; line-height: 1.3; }
+
+    .common-section { background: #f1f7f8; }
+    .common-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: 20px; }
+    .feature-list, .flow-card { border: 1px solid var(--line); background: var(--surface); }
+    .feature-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; padding: 1px; background: var(--line); }
+    .feature-item { display: flex; gap: 12px; padding: 18px; background: var(--surface); }
+    .feature-item i { display: grid; flex: none; width: 23px; height: 23px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-size: 13px; font-style: normal; font-weight: 700; }
+    .feature-item span { color: var(--ink-soft); font-size: 14px; line-height: 1.35; }
+    .flow-card { padding: 26px; }
+    .flow-card > span { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .flow-card h3 { margin: 8px 0 22px; color: var(--ink-deep); font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
+    .flow-step { position: relative; display: flex; gap: 13px; padding: 0 0 19px; }
+    .flow-step:last-child { padding-bottom: 0; }
+    .flow-step:not(:last-child)::after { position: absolute; top: 27px; left: 13px; width: 1px; height: calc(100% - 16px); background: var(--line); content: ""; }
+    .flow-step b { position: relative; z-index: 1; display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--teal); color: #fff; font-family: var(--mono); font-size: 10px; }
+    .flow-step:last-child b { background: var(--pink); }
+    .flow-step strong, .flow-step small { display: block; }
+    .flow-step strong { color: var(--ink-deep); font-size: 14px; }
+    .flow-step small { margin-top: 4px; color: var(--ink-soft); font-size: 12px; line-height: 1.35; }
+
+    .packages-section { background: var(--surface); }
+    .package-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+    .package-card { position: relative; display: flex; flex-direction: column; padding: clamp(24px, 3vw, 32px); border: 1px solid var(--line); background: var(--surface); transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+    .package-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .package-card.recommended { border: 2px solid var(--teal); box-shadow: 0 15px 45px rgba(8, 170, 189, .14); }
+    .recommended-ribbon { position: absolute; top: -1px; right: 22px; padding: 8px 12px; border-radius: 0 0 8px 8px; background: var(--pink); color: #fff; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+    .package-head { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .package-head > span { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .recommended .package-head > span { color: var(--pink-dark); }
+    .package-head h3 { margin: 8px 0 15px; color: var(--ink-deep); font-size: 29px; font-weight: 500; letter-spacing: -.04em; }
+    .hours { display: flex; align-items: baseline; gap: 8px; }
+    .hours strong { color: var(--ink-deep); font-size: 48px; font-weight: 500; letter-spacing: -.07em; line-height: 1; }
+    .hours span { color: var(--ink-soft); font-size: 14px; }
+    .package-description { min-height: 86px; margin: 20px 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+    .package-includes { margin: 0; padding: 0; list-style: none; }
+    .package-includes li { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid #eef0f1; color: var(--ink-soft); font-size: 13px; line-height: 1.35; }
+    .package-includes li::before { flex: none; color: var(--teal); content: "✓"; font-weight: 700; }
+    .recommended .package-includes li::before { color: var(--pink); }
+    .package-limitation { margin-top: 22px; padding: 14px; border-left: 3px solid var(--pink); background: var(--pink-light); color: var(--pink-dark); font-size: 12px; line-height: 1.45; }
+    .package-limitation strong { display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .package-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 24px; }
+    .package-actions .button { width: 100%; }
+    .package-card.selected { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(255,10,92,.09); }
+
+    .timeline-section { background: #fff; }
+    .timeline-controls { display: grid; grid-template-columns: repeat(2, minmax(190px, 250px)) minmax(250px, 1fr); gap: 12px; align-items: stretch; margin-bottom: 28px; }
+    .timeline-control { display: flex; flex-direction: column; justify-content: center; gap: 7px; padding: 15px 16px; border: 1px solid var(--line); background: var(--paper); }
+    .timeline-control span { color: var(--ink-soft); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .timeline-control input { width: 100%; min-height: 34px; padding: 4px 0; border: 0; outline: 0; background: transparent; color: var(--ink-deep); font-size: 17px; font-weight: 600; }
+    .timeline-control input:focus { color: var(--teal-dark); }
+    .timeline-summary { display: flex; flex-direction: column; justify-content: center; padding: 15px 20px; border-left: 4px solid var(--pink); background: var(--pink-light); }
+    .timeline-summary small { color: var(--pink-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .timeline-summary strong { margin-top: 5px; color: var(--ink-deep); font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
+    .timeline-summary span { margin-top: 3px; color: var(--ink-soft); font-size: 12px; }
+    .timeline-track { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 12px; }
+    .sprint-card { position: relative; min-height: 190px; padding: 20px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .sprint-card:nth-child(2n) { border-top-color: var(--pink); }
+    .sprint-card:last-child { border-color: rgba(255,10,92,.35); border-top-color: var(--pink); background: var(--pink-light); }
+    .sprint-number { display: inline-flex; align-items: center; justify-content: center; min-width: 39px; height: 23px; padding: 0 8px; border-radius: 999px; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; }
+    .sprint-card:nth-child(2n) .sprint-number { background: var(--pink-light); color: var(--pink-dark); }
+    .sprint-card:last-child .sprint-number { background: var(--pink); color: #fff; }
+    .sprint-date { display: block; margin-top: 15px; color: var(--ink-soft); font-family: var(--mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
+    .sprint-card h3 { margin: 8px 0 7px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .sprint-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.4; }
+    .timeline-footnote { margin: 18px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .timeline-footnote strong { color: var(--ink-deep); }
+
+    .comparison-section { background: #f1f7f8; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 12px 35px rgba(75,76,78,.06); }
+    .comparison-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+    .comparison-table th, .comparison-table td { padding: 16px 18px; border-bottom: 1px solid var(--line); text-align: left; }
+    .comparison-table th { color: var(--ink-soft); font-family: var(--mono); font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+    .comparison-table th:first-child { width: 47%; }
+    .comparison-table th:nth-child(3), .comparison-table td:nth-child(3) { background: rgba(8,170,189,.08); }
+    .comparison-table th:nth-child(3) { color: var(--teal-dark); border-top: 4px solid var(--teal); }
+    .comparison-table td { color: var(--ink-soft); font-size: 13px; }
+    .comparison-table td:first-child { color: var(--ink-deep); font-weight: 600; }
+    .comparison-table tr:last-child td { border-bottom: 0; }
+    .status-yes, .status-no { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .status-yes { color: var(--teal-dark); }
+    .status-yes::before { content: "✓"; }
+    .status-no { color: #a3a7aa; font-weight: 500; }
+    .status-no::before { content: "—"; }
+    .table-note { margin: 14px 0 0; color: var(--ink-soft); font-size: 12px; }
+
+    .recommendation-section { background: var(--ink-deep); color: #fff; }
+    .recommendation-section .section-number { border-color: rgba(255,255,255,.45); color: #fff; }
+    .recommendation-section .section-kicker { color: #70e0ea; }
+    .recommendation-section .section-heading h2 { color: #fff; }
+    .recommendation-section .section-heading p { color: rgba(255,255,255,.65); }
+    .recommendation-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(290px, .75fr); gap: 36px; align-items: center; }
+    .recommendation-copy h3 { margin: 0 0 18px; color: #fff; font-size: clamp(30px, 4vw, 50px); font-weight: 500; letter-spacing: -.04em; }
+    .recommendation-copy p { max-width: 740px; margin: 0; color: rgba(255,255,255,.72); font-size: 19px; line-height: 1.6; }
+    .benefit-list { display: grid; gap: 10px; }
+    .benefit { display: flex; align-items: center; gap: 13px; padding: 16px; background: rgba(255,255,255,.08); }
+    .benefit i { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: var(--pink); color: #fff; font-style: normal; font-weight: 700; }
+    .benefit strong { color: #fff; font-size: 14px; }
+    .benefit small { display: block; margin-top: 2px; color: rgba(255,255,255,.55); font-size: 11px; }
+
+    .considerations-layout { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+    .consideration-card { padding: 28px; border: 1px solid var(--line); background: var(--surface); }
+    .consideration-card.caveats { border-top: 4px solid var(--pink); }
+    .consideration-card.scope { border-top: 4px solid var(--teal); }
+    .consideration-card h3 { margin: 0 0 20px; color: var(--ink-deep); font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
+    .consideration-card ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .consideration-card li { position: relative; padding-left: 22px; color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
+    .consideration-card li::before { position: absolute; left: 0; top: 2px; color: var(--teal); content: "✓"; font-weight: 700; }
+    .caveats li::before { color: var(--pink); content: "!"; }
+
+    .closing-section { padding-top: 85px; padding-bottom: 85px; background: var(--pink-light); }
+    .closing-card { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: clamp(28px,5vw,54px); border: 1px solid rgba(255,10,92,.23); background: var(--surface); box-shadow: var(--shadow); }
+    .closing-card h2 { margin: 0 0 10px; color: var(--ink-deep); font-size: clamp(29px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .closing-card p { max-width: 620px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.5; }
+    .selection-note { margin-top: 10px !important; color: var(--pink-dark) !important; font-size: 13px !important; font-weight: 700; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 32px clamp(22px,7vw,108px); background: #45474a; color: #fff; }
+    footer strong, footer span { display: block; }
+    footer strong { font-size: 13px; }
+    footer span, footer p { color: rgba(255,255,255,.55); font-size: 11px; }
+    footer span { margin-top: 5px; }
+    footer p { max-width: 430px; margin: 0; text-align: right; line-height: 1.5; }
+
+    @media (max-width: 1100px) {
+      .top-nav { display: none; }
+      .package-list { grid-template-columns: 1fr; }
+      .package-card { display: grid; grid-template-columns: minmax(200px,.7fr) minmax(0,1fr); column-gap: 30px; }
+      .package-head { grid-row: 1 / span 3; border-bottom: 0; }
+      .package-description { min-height: 0; margin: 0 0 12px; }
+      .package-includes { grid-column: 2; }
+      .package-limitation, .package-actions { grid-column: 2; }
+    }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-card { max-width: 460px; }
+      .overview-grid, .common-layout, .recommendation-layout, .considerations-layout { grid-template-columns: 1fr; }
+      .timeline-controls { grid-template-columns: 1fr 1fr; }
+      .timeline-summary { grid-column: 1 / -1; }
+      .feature-list { grid-template-columns: 1fr 1fr; }
+      .recommendation-layout { gap: 28px; }
+      .closing-card { align-items: flex-start; flex-direction: column; }
+    }
+    @media (max-width: 620px) {
+      .topbar { align-items: flex-start; gap: 14px; }
+      .brand small { display: none; }
+      .top-actions { flex-wrap: wrap; justify-content: flex-end; }
+      .button { min-height: 36px; padding: 0 11px; font-size: 11px; }
+      .hero { padding-top: 72px; }
+      .hero h1 { font-size: clamp(44px, 13vw, 66px); }
+      .hero::before, .hero::after { display: none; }
+      .feature-list, .metric-grid { grid-template-columns: 1fr; }
+      .package-card { display: block; }
+      .package-head { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+      .package-description { margin: 20px 0; }
+      .package-actions { margin-top: 0; }
+      .timeline-controls { grid-template-columns: 1fr; }
+      .timeline-summary { grid-column: auto; }
+      .section-heading { flex-direction: column; }
+      .comparison-table th, .comparison-table td { padding: 13px 14px; }
+      footer { align-items: flex-start; flex-direction: column; }
+      footer p { text-align: left; }
+    }
+    @media print {
+      :root { --paper: #fff; }
+      @page { margin: 12mm; size: A4 landscape; }
+      body { background: #fff; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .topbar, .package-actions { display: none !important; }
+      .hero { min-height: 172mm; padding: 28mm 18mm; break-after: page; }
+      .content-section { min-height: 150mm; padding: 18mm; break-before: page; }
+      .package-card, .feature-item, .consideration-card, .comparison-table tr { break-inside: avoid; }
+      .package-card:hover { transform: none; box-shadow: none; }
+      .closing-section { break-before: page; }
+      footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Símbolo AtomDev">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#5f6062" stroke-width="1.8"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(0 24 24)"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(52 24 24)"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(-52 24 24)"/>
+            <circle cx="24" cy="24" r="5.4" fill="#08aabd"/>
+            <circle cx="29.8" cy="8.8" r="2.6" fill="#08aabd"/>
+            <circle cx="10.5" cy="22.5" r="2.6" fill="#ff0a5c"/>
+            <circle cx="35.5" cy="35.5" r="2.6" fill="#ff0a5c"/>
+          </svg>
+        </span>
+        <span><strong>AtomDev</strong><small>Propuesta de solución</small></span>
+      </a>
+      <div class="top-actions">
+        <nav class="top-nav" aria-label="Secciones de la propuesta">
+          <a href="#alternativas">Alternativas</a>
+          <a href="#sprints">Sprints</a>
+          <a href="#comparativa">Comparativa</a>
+          <a href="#consideraciones">Consideraciones</a>
+        </nav>
+        <button class="button button-ghost" id="fullscreen-button">Pantalla completa</button>
+        <button class="button button-primary" id="print-button">Imprimir / PDF</button>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">PROPUESTA DE IMPLEMENTACIÓN GRADUAL</span>
+        <h1>Plataforma de Gestión de Soportes e Incidencias</h1>
+        <p>Propuesta de implementación gradual para el registro, seguimiento y control de incidencias de sistemas internos.</p>
+        <div class="hero-tags" aria-label="Características de la solución">
+          <span>Aplicación independiente</span><span>Flujo centralizado</span><span>Arquitectura escalable</span><span>Gestión multi-proyecto</span>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Resumen de alternativas">
+        <span>Decisión de alcance</span>
+        <h2>Encuentra el punto justo de inversión.</h2>
+        <div class="hero-card-rule"></div>
+        <small>Alternativa recomendada</small>
+        <p><strong class="accent">220 horas · MVP Configurable</strong><br>Autonomía para incorporar nuevos proyectos y tipos de incidencia sin depender de desarrollos adicionales.</p>
+      </aside>
+    </section>
+
+    <section class="content-section" id="resumen">
+      <div class="section-heading"><span class="section-number">01</span><div><span class="section-kicker">RESUMEN DE LA SOLUCIÓN</span><h2>Una base común para crecer por etapas.</h2><p>La plataforma comienza con ServiuPRO-Pagos como primer proyecto, manteniendo una estructura preparada para incorporar nuevos proyectos progresivamente.</p></div></div>
+      <div class="overview-grid">
+        <div class="overview-copy"><p>Se propone desarrollar una <strong>nueva plataforma web</strong> para centralizar el registro y seguimiento de soportes e incidencias. La solución será independiente del sistema legacy actual y estará preparada para organizar distintos proyectos o sistemas internos desde un mismo lugar.</p></div>
+        <div class="metric-grid" aria-label="Resumen funcional"><div class="metric"><strong>4</strong><span>perfiles de usuario</span></div><div class="metric"><strong>4</strong><span>bandejas de trabajo</span></div><div class="metric"><strong>1</strong><span>flujo de atención</span></div><div class="metric"><strong>∞</strong><span>proyectos por incorporar</span></div></div>
+      </div>
+    </section>
+
+    <section class="content-section common-section" id="comun">
+      <div class="section-heading"><span class="section-number">02</span><div><span class="section-kicker">ALCANCE COMÚN</span><h2>La base operativa está incluida en todos los paquetes.</h2><p>Las tres alternativas comparten los componentes necesarios para comenzar a gestionar incidencias de manera centralizada.</p></div></div>
+      <div class="common-layout">
+        <div class="feature-list">
+          <div class="feature-item"><i>✓</i><span>Aplicación web nueva e independiente</span></div>
+          <div class="feature-item"><i>✓</i><span>Inicio de sesión centralizado</span></div>
+          <div class="feature-item"><i>✓</i><span>Cuatro perfiles de usuario</span></div>
+          <div class="feature-item"><i>✓</i><span>Un único flujo de gestión</span></div>
+          <div class="feature-item"><i>✓</i><span>Cuatro bandejas de trabajo</span></div>
+          <div class="feature-item"><i>✓</i><span>Creación y administración de proyectos</span></div>
+          <div class="feature-item"><i>✓</i><span>Registro de solicitudes según planilla</span></div>
+          <div class="feature-item"><i>✓</i><span>Asignación de responsables y estados</span></div>
+          <div class="feature-item"><i>✓</i><span>Control básico de fechas y SLA</span></div>
+          <div class="feature-item"><i>✓</i><span>Acciones, observaciones y adjuntos</span></div>
+          <div class="feature-item"><i>✓</i><span>Notificaciones por cambio de estado</span></div>
+          <div class="feature-item"><i>✓</i><span>Filtros, búsqueda y exportación a Excel</span></div>
+          <div class="feature-item"><i>✓</i><span>Pruebas funcionales y despliegue</span></div>
+          <div class="feature-item"><i>✓</i><span>Documentación básica</span></div>
+        </div>
+        <aside class="flow-card"><span>ARQUITECTURA DE LA SOLUCIÓN</span><h3>Un flujo claro, de punta a punta.</h3><div class="flow-step"><b>01</b><div><strong>Proyecto</strong><small>ServiuPRO-Pagos y futuros sistemas internos.</small></div></div><div class="flow-step"><b>02</b><div><strong>Bandeja</strong><small>Cuatro espacios de trabajo según el perfil y estado.</small></div></div><div class="flow-step"><b>03</b><div><strong>Solicitud</strong><small>Registro, responsable, fechas, SLA y archivos adjuntos.</small></div></div><div class="flow-step"><b>04</b><div><strong>Seguimiento</strong><small>Estados, observaciones, filtros y exportación.</small></div></div></aside>
+      </div>
+    </section>
+
+    <section class="content-section packages-section" id="alternativas">
+      <div class="section-heading"><span class="section-number">03</span><div><span class="section-kicker">ALTERNATIVAS DE IMPLEMENTACIÓN</span><h2>Tres niveles para decidir cuánto autonomía necesita el Servicio.</h2><p>Todos parten de la misma base operativa. La diferencia está en la capacidad de configuración, control y crecimiento que queda habilitada.</p></div></div>
+      <div class="package-list">
+        <article class="package-card" data-package="MVP Base">
+          <div class="package-head"><span>PAQUETE 01</span><h3>MVP Base</h3><div class="hours"><strong>180</strong><span>horas</span></div></div>
+          <p class="package-description">Alcance mínimo necesario para comenzar a gestionar incidencias mediante una plataforma centralizada.</p>
+          <ul class="package-includes">
+            <li>Login centralizado y cuatro perfiles</li><li>Cuatro bandejas de trabajo</li><li>Formulario basado en la planilla entregada</li><li>ServiuPRO-Pagos y sus tipos precargados</li><li>Mantenedor para crear y editar proyectos</li><li>Responsables, estados, fechas y SLA básico</li><li>Archivos adjuntos y notificaciones por estado</li><li>Filtros básicos y exportación a Excel</li><li>Pruebas funcionales y despliegue</li>
+          </ul>
+          <div class="package-limitation"><strong>Consideración</strong>Los tipos de incidencia estarán precargados para ServiuPRO-Pagos y no podrán ser creados ni administrados directamente por el cliente.</div>
+          <div class="package-actions"><button class="button button-ghost select-package" data-select="MVP Base">Ver alcance del paquete</button></div>
+        </article>
+
+        <article class="package-card recommended" data-package="MVP Configurable">
+          <span class="recommended-ribbon">RECOMENDADO</span>
+          <div class="package-head"><span>PAQUETE 02</span><h3>MVP Configurable</h3><div class="hours"><strong>220</strong><span>horas</span></div></div>
+          <p class="package-description">La alternativa recomendada para entregar autonomía al Servicio en la incorporación de nuevos proyectos y tipos de incidencia.</p>
+          <ul class="package-includes">
+            <li>Todo el alcance del MVP Base</li><li>Mantenedor de tipos de incidencia</li><li>Creación y edición de tipos de incidencia</li><li>Asociación por proyecto</li><li>Activación y desactivación de tipos</li><li>Catálogos administrables de clasificación</li><li>Configuración autónoma de nuevos proyectos</li><li>Filtros por proyecto, tipo, responsable, estado y fechas</li><li>Mejoras de usabilidad y mayor cobertura de pruebas</li>
+          </ul>
+          <div class="package-limitation"><strong>Valor de negocio</strong>El Servicio puede administrar nuevos proyectos y sus tipos de incidencia sin solicitar desarrollos adicionales.</div>
+          <div class="package-actions"><button class="button button-pink select-package" data-select="MVP Configurable">Seleccionar alternativa recomendada</button></div>
+        </article>
+
+        <article class="package-card" data-package="Plataforma Completa">
+          <div class="package-head"><span>PAQUETE 03</span><h3>Plataforma Completa</h3><div class="hours"><strong>260</strong><span>horas</span></div></div>
+          <p class="package-description">Alternativa orientada a fortalecer el control de gestión, los indicadores y la trazabilidad histórica.</p>
+          <ul class="package-includes">
+            <li>Todo el alcance del MVP Configurable</li><li>Dashboard operativo</li><li>Indicadores por proyecto, estado y tipo</li><li>Solicitudes abiertas, cerradas y vencidas</li><li>Cumplimiento de SLA y tiempos promedio</li><li>Histórico de cambios de estado</li><li>Usuario, fecha, hora, estado anterior y nuevo</li><li>Historial de reasignaciones</li><li>Reportería comparativa entre proyectos</li><li>Mayor documentación y estabilización</li>
+          </ul>
+          <div class="package-limitation"><strong>Consideración</strong>Prioriza la reportería y trazabilidad avanzada como una segunda capa de madurez de la plataforma.</div>
+          <div class="package-actions"><button class="button button-ghost select-package" data-select="Plataforma Completa">Ver alcance del paquete</button></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section timeline-section" id="sprints">
+      <div class="section-heading"><span class="section-number">04</span><div><span class="section-kicker">PLAN DE IMPLEMENTACIÓN</span><h2>Sprints semanales para avanzar con visibilidad.</h2><p>En cada sprint se levantan, priorizan y validan requerimientos. El cronograma se ajusta según la fecha de inicio y la capacidad semanal definidas.</p></div></div>
+      <div class="timeline-controls">
+        <label class="timeline-control"><span>Fecha de inicio</span><input id="project-start" type="date" aria-label="Fecha de inicio del proyecto"></label>
+        <label class="timeline-control"><span>Capacidad semanal</span><input id="weekly-hours" type="number" min="1" max="168" step="1" value="44" aria-label="Horas de capacidad semanal"><small style="color: var(--ink-soft); font-size: 11px;">horas estimadas por sprint</small></label>
+        <div class="timeline-summary"><small>Fecha estimada de entrega</small><strong id="delivery-date">—</strong><span id="timeline-estimate">MVP Configurable · 220 horas · 5 sprints</span></div>
+      </div>
+      <div class="timeline-track" id="sprint-track" aria-live="polite"></div>
+      <p class="timeline-footnote"><strong>Metodología de trabajo:</strong> cada tarjeta representa una semana de trabajo. Los requerimientos se revisan al inicio de cada sprint y se validan antes de avanzar al siguiente.</p>
+    </section>
+
+    <section class="content-section comparison-section" id="comparativa">
+      <div class="section-heading"><span class="section-number">05</span><div><span class="section-kicker">MATRIZ DE FUNCIONALIDADES</span><h2>La diferencia entre paquetes, en una sola vista.</h2><p>La columna de 220 horas marca el punto de equilibrio entre operación, autonomía y crecimiento.</p></div></div>
+      <div class="table-wrap">
+        <table class="comparison-table">
+          <thead><tr><th>Funcionalidad</th><th>180 horas</th><th>220 horas · Recomendada</th><th>260 horas</th></tr></thead>
+          <tbody>
+            <tr><td>Aplicación web independiente</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Login centralizado</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Cuatro perfiles y cuatro bandejas</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Formulario según planilla</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Proyecto ServiuPRO-Pagos precargado</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Creación de proyectos</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Tipos de incidencia precargados</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Archivos adjuntos</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Notificaciones por cambio de estado</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Control básico de SLA y exportación a Excel</td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Mantenedor de tipos de incidencia</td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Tipos de incidencia por proyecto</td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Catálogos administrables</td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Filtros ampliados</td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Dashboard operativo</td><td><span class="status-no">No incluido</span></td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Indicadores de gestión</td><td><span class="status-no">No incluido</span></td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Logs de cambios de estado</td><td><span class="status-no">No incluido</span></td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Historial de reasignaciones</td><td><span class="status-no">No incluido</span></td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+            <tr><td>Reportería comparativa</td><td><span class="status-no">No incluido</span></td><td><span class="status-no">No incluido</span></td><td><span class="status-yes">Incluido</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">La tabla está diseñada para facilitar la revisión de las tres alternativas en distintos dispositivos.</p>
+    </section>
+
+    <section class="content-section recommendation-section" id="recomendacion">
+      <div class="section-heading"><span class="section-number">06</span><div><span class="section-kicker">RECOMENDACIÓN COMERCIAL</span><h2>Una recomendación que se puede explicar en una frase.</h2><p>La alternativa recomendada es la que mejor balancea inversión inicial y autonomía futura.</p></div></div>
+      <div class="recommendation-layout">
+        <div class="recommendation-copy"><h3>Alternativa recomendada: 220 horas</h3><p>El paquete de 220 horas entrega el mejor equilibrio entre precio, autonomía y capacidad de crecimiento. Además de cubrir la operación completa de incidencias, permite que el Servicio cree nuevos proyectos y administre los tipos de incidencia asociados sin depender de desarrollos adicionales.</p></div>
+        <div class="benefit-list"><div class="benefit"><i>01</i><div><strong>Mayor autonomía</strong><small>El Servicio administra su propia configuración.</small></div></div><div class="benefit"><i>02</i><div><strong>Menor dependencia técnica</strong><small>Menos solicitudes de desarrollo para ajustes operativos.</small></div></div><div class="benefit"><i>03</i><div><strong>Preparación para nuevos proyectos</strong><small>La base queda lista para crecer por etapas.</small></div></div></div>
+      </div>
+    </section>
+
+    <section class="content-section" id="consideraciones">
+      <div class="section-heading"><span class="section-number">07</span><div><span class="section-kicker">ALCANCE Y LÍMITES</span><h2>Consideraciones para tomar la decisión con claridad.</h2><p>Estas condiciones ayudan a mantener el alcance controlado y las expectativas alineadas.</p></div></div>
+      <div class="considerations-layout">
+        <article class="consideration-card scope"><h3>Incluido en la definición</h3><ul><li>Un único flujo de atención.</li><li>Cuatro bandejas y cuatro perfiles de usuario.</li><li>Notificaciones únicamente ante cambios de estado.</li><li>Adjuntos cargados y descargados desde la solicitud.</li><li>Formulario basado en los campos definidos en la planilla entregada.</li></ul></article>
+        <article class="consideration-card caveats"><h3>Fuera del alcance base</h3><ul><li>No se considera integración automática con el sistema legacy.</li><li>No se considera migración masiva de datos históricos.</li><li>No se consideran integraciones con plataformas externas.</li><li>Las funcionalidades no expresadas en el paquete seleccionado se evaluarán como mejoras posteriores.</li></ul></article>
+      </div>
+    </section>
+
+    <section class="content-section closing-section" id="cierre">
+      <div class="closing-card"><div><span class="section-kicker">SIGUIENTE PASO</span><h2>Definamos el nivel de autonomía para comenzar.</h2><p>La alternativa seleccionada definirá el alcance de implementación de la primera versión de la plataforma.</p><p class="selection-note" id="selection-note">Plan de referencia: MVP Configurable · 220 horas.</p></div><button class="button button-pink" id="back-to-packages">Revisar alternativas</button></div>
+    </section>
+
+    <footer><div><strong>AtomDev · Plataforma de Gestión de Soportes e Incidencias</strong><span>Propuesta de implementación · Documento de conversación</span></div><p>Una nueva base para registrar, seguir y controlar incidencias de distintos proyectos.</p></footer>
+  </main>
+
+  <script>
+    (() => {
+      const packageButtons = document.querySelectorAll(".select-package");
+      const packageCards = document.querySelectorAll(".package-card");
+      const selectionNote = document.getElementById("selection-note");
+      const packageSection = document.getElementById("alternativas");
+      const sprintSection = document.getElementById("sprints");
+      const startInput = document.getElementById("project-start");
+      const weeklyHoursInput = document.getElementById("weekly-hours");
+      const deliveryDate = document.getElementById("delivery-date");
+      const timelineEstimate = document.getElementById("timeline-estimate");
+      const sprintTrack = document.getElementById("sprint-track");
+      const packageHours = { "MVP Base": 180, "MVP Configurable": 220, "Plataforma Completa": 260 };
+      let selectedPackage = "MVP Configurable";
+
+      function dateInputValue(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function nextMonday() {
+        const date = new Date();
+        date.setHours(12, 0, 0, 0);
+        const daysUntilMonday = (8 - date.getDay()) % 7;
+        date.setDate(date.getDate() + daysUntilMonday);
+        return date;
+      }
+
+      function localDate(value) {
+        const [year, month, day] = value.split("-").map(Number);
+        return new Date(year, month - 1, day, 12, 0, 0, 0);
+      }
+
+      function addDays(date, days) {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+      }
+
+      function formatDate(date, options = {}) {
+        return new Intl.DateTimeFormat("es-CL", { day: "numeric", month: "long", year: "numeric", ...options }).format(date);
+      }
+
+      function formatRange(from, to) {
+        const fromText = new Intl.DateTimeFormat("es-CL", { day: "numeric", month: "short" }).format(from);
+        const toText = new Intl.DateTimeFormat("es-CL", { day: "numeric", month: "short" }).format(to);
+        return `${fromText} — ${toText}`;
+      }
+
+      function sprintDetails(index, name) {
+        const phases = [
+          ["Levantamiento y priorización", "Tomar requerimientos, ordenar prioridades y validar criterios de aceptación."],
+          ["Diseño funcional y de datos", "Acordar flujo, perfiles, bandejas, estados y estructura de la información."],
+          ["Construcción del núcleo", "Login, proyectos, formulario de solicitudes, responsables y estados."],
+          ["Configuración de la operación", name === "MVP Base" ? "Cargar ServiuPRO-Pagos y sus tipos de incidencia precargados." : "Configurar tipos, catálogos, asociaciones y filtros para dar autonomía al Servicio."],
+          ["Pruebas y puesta en marcha", "Validar el flujo completo, corregir hallazgos, documentar y preparar el despliegue."],
+          ["Control y trazabilidad", "Dashboard, indicadores, logs, reasignaciones y reportería comparativa entre proyectos."]
+        ];
+        if (index < phases.length) return phases[index];
+        return ["Estabilización y acompañamiento", "Ajustes finales, validación con usuarios y preparación de la siguiente etapa."];
+      }
+
+      function renderTimeline() {
+        const hours = packageHours[selectedPackage];
+        const weeklyHours = Math.min(Math.max(Number(weeklyHoursInput.value) || 44, 1), 168);
+        weeklyHoursInput.value = weeklyHours;
+        if (!startInput.value) startInput.value = dateInputValue(nextMonday());
+        const start = localDate(startInput.value);
+        if (Number.isNaN(start.getTime())) return;
+        const sprintCount = Math.max(1, Math.ceil(hours / weeklyHours));
+        const delivery = addDays(start, sprintCount * 7 - 1);
+        deliveryDate.textContent = formatDate(delivery);
+        timelineEstimate.textContent = `${selectedPackage} · ${hours} horas · ${sprintCount} ${sprintCount === 1 ? "sprint" : "sprints"} semanales`;
+        sprintTrack.innerHTML = Array.from({ length: sprintCount }, (_, index) => {
+          const sprintStart = addDays(start, index * 7);
+          const sprintEnd = addDays(sprintStart, 6);
+          const [title, detail] = sprintDetails(index, selectedPackage);
+          return `<article class="sprint-card"><span class="sprint-number">SPRINT ${String(index + 1).padStart(2, "0")}</span><span class="sprint-date">${formatRange(sprintStart, sprintEnd)}</span><h3>${title}</h3><p>${detail}</p></article>`;
+        }).join("");
+      }
+
+      function selectPackage(name) {
+        selectedPackage = name;
+        packageCards.forEach((card) => card.classList.toggle("selected", card.dataset.package === name));
+        selectionNote.textContent = `Plan seleccionado: ${name}. La planificación semanal se actualizó según su alcance.`;
+        renderTimeline();
+        sprintSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      packageButtons.forEach((button) => button.addEventListener("click", () => selectPackage(button.dataset.select)));
+      document.getElementById("back-to-packages").addEventListener("click", () => packageSection.scrollIntoView({ behavior: "smooth", block: "start" }));
+      startInput.addEventListener("input", renderTimeline);
+      weeklyHoursInput.addEventListener("input", renderTimeline);
+      document.getElementById("print-button").addEventListener("click", () => window.print());
+      document.getElementById("fullscreen-button").addEventListener("click", async () => {
+        try {
+          if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (_) { /* Algunos navegadores no permiten pantalla completa desde archivos locales. */ }
+      });
+      startInput.value = dateInputValue(nextMonday());
+      renderTimeline();
+    })();
+  </script>
+</body>
+</html>
