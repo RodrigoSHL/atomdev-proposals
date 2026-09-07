@@ -272,15 +272,118 @@
     }
     @media print {
       :root { --paper: #fff; }
-      @page { margin: 12mm; size: A4 landscape; }
-      body { background: #fff; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .topbar, .package-actions { display: none !important; }
-      .hero { min-height: 172mm; padding: 28mm 18mm; break-after: page; }
-      .content-section { min-height: 150mm; padding: 18mm; break-before: page; }
-      .package-card, .feature-item, .consideration-card, .comparison-table tr { break-inside: avoid; }
-      .package-card:hover { transform: none; box-shadow: none; }
-      .closing-section { break-before: page; }
-      footer { display: none; }
+      @page { margin: 10mm; size: A4 landscape; }
+      html, body { width: auto; min-width: 0; background: #fff; }
+      body {
+        font-size: 10pt;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      .site-shell { min-height: 0; overflow: visible; }
+      .topbar, .package-actions, .closing-card .button, footer { display: none !important; }
+
+      /* Cada bloque principal se convierte en una hoja real del PDF. */
+      .hero, .content-section {
+        width: 100%;
+        min-height: 190mm;
+        break-after: page;
+        page-break-after: always;
+      }
+      .hero {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1.35fr) minmax(72mm, .65fr) !important;
+        gap: 12mm !important;
+        align-items: center !important;
+        height: 190mm;
+        padding: 14mm;
+      }
+      .hero h1 { margin: 5mm 0 6mm; font-size: 17mm; line-height: .98; }
+      .hero-copy > p { font-size: 4.6mm; line-height: 1.4; }
+      .hero-tags { gap: 2mm; margin-top: 7mm; }
+      .hero-tags span { padding: 2.2mm 3mm; font-size: 8pt; }
+      .hero-card { padding: 7mm; box-shadow: 0 5mm 14mm rgba(75, 76, 78, .12); }
+      .hero-card h2 { margin: 3mm 0 2mm; font-size: 9mm; }
+      .hero-card p { margin-top: 5mm; font-size: 9pt; }
+
+      .content-section {
+        padding: 10mm 12mm;
+        break-before: page;
+        page-break-before: always;
+      }
+      .section-heading {
+        gap: 4mm;
+        max-width: none;
+        margin-bottom: 7mm;
+      }
+      .section-number { width: 11mm; height: 11mm; font-size: 8pt; }
+      .section-heading h2 { margin-top: 1.5mm; font-size: 8.5mm; line-height: 1.04; }
+      .section-heading p { margin-top: 2.5mm; font-size: 9.5pt; line-height: 1.35; }
+
+      /* Se restablecen las columnas de escritorio porque la vista de impresión
+         puede activar accidentalmente los breakpoints móviles del navegador. */
+      .overview-grid { grid-template-columns: minmax(0, 1fr) minmax(85mm, .8fr) !important; gap: 12mm; }
+      .overview-copy p { font-size: 13pt; line-height: 1.45; }
+      .metric { min-height: 27mm; padding: 4mm; }
+      .metric strong { font-size: 24pt; }
+
+      .common-layout { grid-template-columns: minmax(0, 1.25fr) minmax(70mm, .75fr) !important; gap: 4mm; }
+      .feature-list { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .feature-item { gap: 2.5mm; padding: 3.2mm; }
+      .feature-item i { width: 5mm; height: 5mm; font-size: 7pt; }
+      .feature-item span { font-size: 8pt; }
+      .flow-card { padding: 5mm; }
+      .flow-card h3 { margin: 2mm 0 4mm; font-size: 17pt; }
+      .flow-step { gap: 2.5mm; padding-bottom: 3.5mm; }
+      .flow-step strong { font-size: 9pt; }
+      .flow-step small { font-size: 7.5pt; }
+
+      .package-list { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 3mm; }
+      .package-card { display: flex !important; padding: 4mm; box-shadow: none !important; }
+      .package-card:hover { transform: none; }
+      .package-head { grid-row: auto; padding-bottom: 3mm; border-bottom: 1px solid var(--line); }
+      .package-head h3 { margin: 2mm 0 3mm; font-size: 17pt; }
+      .hours strong { font-size: 29pt; }
+      .hours span { font-size: 8pt; }
+      .package-description { min-height: 0; margin: 3mm 0; font-size: 7.5pt; line-height: 1.3; }
+      .package-includes { grid-column: auto; }
+      .package-includes li { gap: 2mm; padding: 1.35mm 0; font-size: 7pt; line-height: 1.25; }
+      .package-limitation { grid-column: auto; margin-top: 3mm; padding: 3mm; font-size: 6.8pt; }
+      .recommended-ribbon { right: 4mm; padding: 2mm 3mm; font-size: 6.5pt; }
+
+      .timeline-controls { grid-template-columns: repeat(2, minmax(48mm, 62mm)) minmax(70mm, 1fr) !important; gap: 3mm; margin-bottom: 5mm; }
+      .timeline-summary { grid-column: auto !important; }
+      .timeline-control, .timeline-summary { padding: 3.5mm 4mm; }
+      .timeline-summary strong { font-size: 16pt; }
+      .timeline-track { grid-template-columns: repeat(auto-fit, minmax(38mm, 1fr)); gap: 3mm; }
+      .sprint-card { min-height: 40mm; padding: 4mm; }
+      .sprint-card h3 { margin: 2mm 0 1.5mm; font-size: 13pt; }
+      .sprint-card p { font-size: 7.5pt; }
+      .sprint-date { margin-top: 3mm; }
+
+      .table-wrap { overflow: visible; box-shadow: none; }
+      .comparison-table { min-width: 0; table-layout: fixed; }
+      .comparison-table thead { display: table-header-group; }
+      .comparison-table th, .comparison-table td { padding: 1.35mm 2mm; font-size: 6.8pt; line-height: 1.15; }
+      .comparison-table th { font-size: 6.2pt; }
+      .status-yes, .status-no { font-size: 6.5pt; }
+      .table-note { margin-top: 3mm; font-size: 7pt; }
+
+      .recommendation-layout { grid-template-columns: minmax(0, 1fr) minmax(75mm, .75fr) !important; gap: 9mm; }
+      .recommendation-copy h3 { font-size: 26pt; }
+      .recommendation-copy p { font-size: 12pt; }
+      .benefit { padding: 4mm; }
+      .considerations-layout { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 5mm; }
+      .consideration-card { padding: 6mm; }
+      .closing-section { display: grid; align-items: center; }
+      .closing-card { padding: 10mm; box-shadow: none; }
+
+      .package-card, .feature-item, .flow-card, .sprint-card,
+      .consideration-card, .closing-card, .comparison-table tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      p, li { orphans: 3; widows: 3; }
+      .closing-section { break-after: auto; page-break-after: auto; }
     }
   </style>
 </head>
@@ -310,7 +413,8 @@
           <a href="#consideraciones">Consideraciones</a>
         </nav>
         <button class="button button-ghost" id="fullscreen-button">Pantalla completa</button>
-        <button class="button button-primary" id="print-button">Imprimir / PDF</button>
+        <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
       </div>
     </header>
 
@@ -477,7 +581,7 @@
       const timelineEstimate = document.getElementById("timeline-estimate");
       const sprintTrack = document.getElementById("sprint-track");
       const packageHours = { "MVP Base": 180, "MVP Configurable": 220, "Plataforma Completa": 260 };
-      let selectedPackage = "MVP Configurable";
+      let selectedPackage = document.documentElement.dataset.selectedPackage || "MVP Configurable";
 
       function dateInputValue(date) {
         const year = date.getFullYear();
@@ -549,16 +653,37 @@
 
       function selectPackage(name) {
         selectedPackage = name;
+        document.documentElement.dataset.selectedPackage = name;
         packageCards.forEach((card) => card.classList.toggle("selected", card.dataset.package === name));
         selectionNote.textContent = `Plan seleccionado: ${name}. La planificación semanal se actualizó según su alcance.`;
         renderTimeline();
         sprintSection.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
+      function downloadWebProposal() {
+        const copy = document.documentElement.cloneNode(true);
+        const copiedStart = copy.querySelector("#project-start");
+        const copiedWeeklyHours = copy.querySelector("#weekly-hours");
+        copiedStart.setAttribute("value", startInput.value);
+        copiedWeeklyHours.setAttribute("value", weeklyHoursInput.value);
+
+        const html = `<!doctype html>\n${copy.outerHTML}`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "propuesta-plataforma-soportes-incidencias.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
       packageButtons.forEach((button) => button.addEventListener("click", () => selectPackage(button.dataset.select)));
       document.getElementById("back-to-packages").addEventListener("click", () => packageSection.scrollIntoView({ behavior: "smooth", block: "start" }));
       startInput.addEventListener("input", renderTimeline);
       weeklyHoursInput.addEventListener("input", renderTimeline);
+      document.getElementById("download-html-button").addEventListener("click", downloadWebProposal);
       document.getElementById("print-button").addEventListener("click", () => window.print());
       document.getElementById("fullscreen-button").addEventListener("click", async () => {
         try {
@@ -566,7 +691,7 @@
           else await document.exitFullscreen();
         } catch (_) { /* Algunos navegadores no permiten pantalla completa desde archivos locales. */ }
       });
-      startInput.value = dateInputValue(nextMonday());
+      document.documentElement.dataset.selectedPackage = selectedPackage;
       renderTimeline();
     })();
   </script>
