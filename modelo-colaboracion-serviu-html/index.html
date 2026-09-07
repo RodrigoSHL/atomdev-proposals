@@ -234,14 +234,61 @@
     }
     @media print {
       :root { --paper: #fff; }
-      @page { margin: 12mm; size: A4 landscape; }
-      body { background: #fff; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .topbar, .settings-panel { display: none !important; }
-      .hero { min-height: 172mm; padding: 28mm 18mm; break-after: page; }
-      .content-section { min-height: 170mm; padding: 18mm; break-before: page; }
-      .scenario-card, .team-column, .agreement-card { break-inside: avoid; }
+      @page { margin: 10mm; size: A4 landscape; }
+      html, body { width: auto; min-width: 0; background: #fff; }
+      body { font-size: 10pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .site-shell { min-height: 0; overflow: visible; }
+      .topbar, .settings-panel, footer { display: none !important; }
+      .hero, .content-section { width: 100%; min-height: 190mm; break-after: page; page-break-after: always; }
+      .hero {
+        display: grid !important;
+        grid-template-columns: minmax(0,1.4fr) minmax(70mm,.6fr) !important;
+        gap: 12mm !important;
+        align-items: center !important;
+        height: 190mm;
+        padding: 14mm;
+      }
+      .hero h1 { margin: 5mm 0 6mm; font-size: 16mm; line-height: .98; }
+      .hero-copy p { font-size: 4.5mm; line-height: 1.4; }
+      .hero-summary { max-width: none; padding: 7mm; box-shadow: 0 5mm 14mm rgba(75,76,78,.12); }
+      .hero-summary > strong { margin: 3mm 0 1mm; font-size: 11mm; }
+      .hero-summary p { font-size: 8.5pt; }
+      .content-section { padding: 10mm 12mm; break-before: page; page-break-before: always; }
+      .content-section:last-of-type { break-after: auto; page-break-after: auto; }
+      .section-heading { flex-direction: row !important; gap: 4mm; max-width: none; margin-bottom: 7mm; }
+      .section-number { width: 11mm; height: 11mm; font-size: 8pt; }
+      .section-heading h2 { margin-top: 1.5mm; font-size: 8.5mm; line-height: 1.04; }
+      .section-heading p { margin-top: 2.5mm; font-size: 9.5pt; line-height: 1.35; }
+
+      .weeks-track { grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 2.5mm; }
+      .week-cell { padding: 4mm; }
+      .week-cell strong { margin-top: 2mm; font-size: 19pt; }
+      .calculation-strip { grid-template-columns: 1fr auto 1fr auto 1fr auto 1.3fr !important; gap: 3mm; margin-top: 4mm; padding: 4mm 5mm; }
+      .calculation-strip > span { display: block !important; }
+      .calculation-strip .result { grid-column: auto !important; padding: 3mm 4mm; }
+
+      .scenario-list { gap: 3mm; }
+      .scenario-card { grid-template-columns: minmax(45mm,.8fr) minmax(95mm,1.5fr) minmax(42mm,.6fr) !important; gap: 5mm; padding: 5mm; }
       .scenario-card:hover { transform: none; box-shadow: none; }
-      footer { display: none; }
+      .scenario-label h3 { margin: 2mm 0; font-size: 16pt; }
+      .scenario-label p { font-size: 8pt; }
+      .formula-pieces { flex-wrap: nowrap !important; }
+      .formula-piece { min-width: 0; min-height: 17mm; padding: 3mm; }
+      .formula-piece strong { font-size: 8.5pt; }
+      .scenario-total { grid-column: auto !important; text-align: right; }
+      .scenario-total strong { margin-top: 2mm; font-size: 20pt; }
+
+      .teams-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 4mm; }
+      .team-column, .marcia-column { grid-column: auto !important; padding: 5mm; }
+      .team-title { margin-bottom: 4mm; }
+      .team-node { padding: 3.5mm; }
+      .team-summary { margin-top: 4mm; padding-top: 3mm; font-size: 8pt; }
+      .agreement-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+      .agreement-card { grid-template-columns: 9mm minmax(0,1fr) auto !important; gap: 4mm; min-height: 27mm; padding: 4mm 5mm; }
+      .agreement-text { font-size: 9pt; line-height: 1.35; }
+      .agreement-status { grid-column: auto !important; font-size: 7pt; }
+      .scenario-card, .team-column, .agreement-card, .calculation-strip { break-inside: avoid; page-break-inside: avoid; }
+      p { orphans: 3; widows: 3; }
     }
   </style>
 </head>
@@ -266,7 +313,8 @@
       <nav class="top-actions" aria-label="Controles de presentación">
         <button class="button button-ghost" id="toggle-settings">Ocultar configuración</button>
         <button class="button button-ghost desktop-action" id="fullscreen-button">Pantalla completa</button>
-        <button class="button button-primary" id="print-button">Imprimir / PDF</button>
+        <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
       </nav>
     </header>
 
@@ -369,6 +417,13 @@
 
       function loadState() {
         try {
+          const embedded = document.getElementById("embedded-proposal-state");
+          if (embedded) {
+            const exported = JSON.parse(embedded.textContent || "null");
+            if (exported?.settings) Object.assign(state, exported.settings);
+            if (Array.isArray(exported?.agreements)) state.agreements = exported.agreements;
+            return;
+          }
           const savedSettings = JSON.parse(localStorage.getItem("serviu-model-settings") || "null");
           const savedAgreements = JSON.parse(localStorage.getItem("serviu-model-agreements") || "null");
           if (savedSettings && typeof savedSettings === "object") Object.assign(state, savedSettings);
@@ -380,6 +435,28 @@
           localStorage.setItem("serviu-model-settings", JSON.stringify({ hourlyRate: state.hourlyRate, weeklyHours: state.weeklyHours, sprintWeeks: state.sprintWeeks, marciaFee: state.marciaFee, marciaInMultiProject: state.marciaInMultiProject }));
           localStorage.setItem("serviu-model-agreements", JSON.stringify(state.agreements));
         } catch (_) { /* Sin persistencia, la sesión sigue siendo usable. */ }
+      }
+      function downloadWebProposal() {
+        const copy = document.documentElement.cloneNode(true);
+        copy.querySelector("#embedded-proposal-state")?.remove();
+        const embedded = document.createElement("script");
+        embedded.type = "application/json";
+        embedded.id = "embedded-proposal-state";
+        embedded.textContent = JSON.stringify({
+          settings: { hourlyRate: state.hourlyRate, weeklyHours: state.weeklyHours, sprintWeeks: state.sprintWeeks, marciaFee: state.marciaFee, marciaInMultiProject: state.marciaInMultiProject },
+          agreements: state.agreements
+        }).replace(/</g, "\\u003c");
+        copy.querySelector("body").appendChild(embedded);
+        const html = `<!doctype html>\n${copy.outerHTML}`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "modelo-colaboracion-serviu.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       }
       function inputValue(id, fallback) {
         const value = $(id).value;
@@ -453,6 +530,7 @@
         $("toggle-settings").textContent = hidden ? "Ocultar configuración" : "Configurar";
       });
       $("print-button").addEventListener("click", () => window.print());
+      $("download-html-button").addEventListener("click", downloadWebProposal);
       $("fullscreen-button").addEventListener("click", async () => {
         try { if (!document.fullscreenElement) await document.documentElement.requestFullscreen(); else await document.exitFullscreen(); } catch (_) { /* No disponible en algunos navegadores. */ }
       });

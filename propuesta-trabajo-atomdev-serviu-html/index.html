@@ -238,13 +238,88 @@
     }
     @media print {
       :root { --paper: #fff; }
-      @page { margin: 12mm; size: A4 landscape; }
-      body { background: #fff; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .topbar, .settings-panel { display: none !important; }
-      .hero { min-height: 172mm; padding: 28mm 18mm; break-after: page; }
-      .content-section { min-height: 145mm; padding: 18mm; break-before: page; }
-      .role-card, .ceremony-card, .backlog-step, .responsibility-card { break-inside: avoid; }
-      footer { display: none; }
+      @page { margin: 10mm; size: A4 landscape; }
+      html, body { width: auto; min-width: 0; background: #fff; }
+      body { font-size: 10pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .site-shell { min-height: 0; overflow: visible; }
+      .topbar, .settings-panel, .closing-card .button, footer { display: none !important; }
+      .hero, .content-section { width: 100%; min-height: 190mm; break-after: page; page-break-after: always; }
+      .hero {
+        display: grid !important;
+        grid-template-columns: minmax(0,1.32fr) minmax(72mm,.68fr) !important;
+        gap: 12mm !important;
+        align-items: center !important;
+        height: 190mm;
+        padding: 14mm;
+      }
+      .hero h1 { margin: 5mm 0 6mm; font-size: 16mm; line-height: .98; }
+      .hero-copy > p { font-size: 4.4mm; line-height: 1.4; }
+      .hero-tags { gap: 2mm; margin-top: 7mm; }
+      .hero-tags span { padding: 2.2mm 3mm; font-size: 8pt; }
+      .hero-summary { max-width: none; padding: 7mm; box-shadow: 0 5mm 14mm rgba(75,76,78,.12); }
+      .hero-summary h2 { margin: 3mm 0 1mm; font-size: 11mm; }
+      .hero-summary p { font-size: 8.5pt; }
+      .content-section { padding: 10mm 12mm; break-before: page; page-break-before: always; }
+      .section-heading { flex-direction: row !important; gap: 4mm; max-width: none; margin-bottom: 7mm; }
+      .section-number { width: 11mm; height: 11mm; font-size: 8pt; }
+      .section-heading h2 { margin-top: 1.5mm; font-size: 8.2mm; line-height: 1.04; }
+      .section-heading p { margin-top: 2.5mm; font-size: 9pt; line-height: 1.35; }
+
+      .intro-grid { grid-template-columns: minmax(0,1.2fr) minmax(75mm,.8fr) !important; gap: 9mm; }
+      .intro-copy, .formal-note, .value-points { grid-column: auto !important; }
+      .intro-copy p { margin-bottom: 3mm; font-size: 10.5pt; line-height: 1.45; }
+      .formal-note { padding: 4mm; font-size: 8pt; }
+      .value-points { display: grid; grid-template-columns: 1fr !important; gap: 2.5mm; }
+      .value-point { padding: 3.5mm; }
+
+      .cell-layout { grid-template-columns: minmax(0,1.25fr) minmax(78mm,.75fr) !important; gap: 4mm; }
+      .role-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+      .role-card { padding: 4.5mm; }
+      .role-card h3 { margin: 3mm 0 1.5mm; font-size: 15pt; }
+      .role-card p { font-size: 8pt; }
+      .cell-aside { padding: 5mm; }
+      .cell-aside h3 { margin: 2mm 0 4mm; font-size: 19pt; }
+      .cell-flow div { padding: 2.5mm 3mm; }
+      .cell-note { margin-top: 3mm; padding-top: 3mm; font-size: 7.5pt; }
+
+      .ceremony-grid { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2.5mm; }
+      .ceremony-card, .ceremony-card:last-child { grid-column: auto !important; min-height: 42mm; padding: 4mm; }
+      .ceremony-card h3 { margin: 3mm 0 1.5mm; font-size: 13pt; }
+      .ceremony-card p { font-size: 7.5pt; }
+      .monthly-cycle { grid-template-columns: repeat(4,minmax(0,1fr)) !important; margin-top: 4mm; }
+      .cycle-step { padding: 3.5mm; }
+      .cycle-step b { margin-bottom: 2mm; }
+      .cycle-step small { font-size: 7pt; }
+
+      .backlog-flow { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2.5mm; }
+      .backlog-step { min-height: 0; padding: 4mm 3.5mm; }
+      .backlog-step:not(:last-child)::after { display: block; }
+      .backlog-step h3 { margin: 2.5mm 0 1.5mm; font-size: 13pt; }
+      .backlog-step p { font-size: 7.5pt; }
+      .change-rules { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 3mm; margin-top: 4mm; }
+      .change-rule { padding: 4mm; }
+
+      .responsibility-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 4mm; }
+      .responsibility-card { padding: 5mm; }
+      .responsibility-card h3 { margin-bottom: 3mm; font-size: 18pt; }
+      .responsibility-card ul { gap: 2mm; }
+      .responsibility-card li { font-size: 8.5pt; }
+      .sprint-zero { margin-top: 4mm; padding: 4mm; }
+
+      .commercial-layout { grid-template-columns: minmax(0,1.15fr) minmax(78mm,.85fr) !important; gap: 5mm; }
+      .commercial-row > span, .commercial-row > strong { padding: 3mm 4mm; }
+      .commercial-row > span { font-size: 8.5pt; }
+      .commercial-row > strong { font-size: 11pt; }
+      .scale-card { padding: 5mm; }
+      .scale-card h3 { margin: 2mm 0 4mm; font-size: 20pt; }
+      .scale-card p { font-size: 9pt; }
+      .closing-section { display: grid; align-items: center; break-after: auto; page-break-after: auto; }
+      .closing-card { flex-direction: row !important; padding: 10mm; box-shadow: none; }
+
+      .role-card, .cell-aside, .ceremony-card, .cycle-step, .backlog-step,
+      .change-rule, .responsibility-card, .sprint-zero, .commercial-table,
+      .scale-card, .closing-card { break-inside: avoid; page-break-inside: avoid; }
+      p, li { orphans: 3; widows: 3; }
     }
   </style>
 </head>
@@ -271,7 +346,8 @@
           <a href="#modelo">Modelo</a><a href="#metodologia">Metodología</a><a href="#comercial">Comercial</a>
         </nav>
         <button class="button button-ghost" id="settings-toggle">Configurar propuesta</button>
-        <button class="button button-primary" id="print-button">Imprimir / PDF</button>
+        <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
       </div>
     </header>
 
@@ -362,12 +438,22 @@
   <script>
     (() => {
       const defaults = { hourlyRate: 1, weeklyHours: 44, sprintWeeks: 4, cellCount: 1 };
-      const state = { ...defaults };
+      const saved = document.documentElement.dataset;
+      const state = {
+        hourlyRate: Number(saved.hourlyRate ?? defaults.hourlyRate),
+        weeklyHours: Number(saved.weeklyHours ?? defaults.weeklyHours),
+        sprintWeeks: Number(saved.sprintWeeks ?? defaults.sprintWeeks),
+        cellCount: Number(saved.cellCount ?? defaults.cellCount)
+      };
       const $ = (id) => document.getElementById(id);
       const formatUF = (value) => new Intl.NumberFormat("es-CL", { minimumFractionDigits: Number.isInteger(value) ? 0 : 1, maximumFractionDigits: 2 }).format(value);
       const clamp = (value, min, max) => Math.min(Math.max(Number.isFinite(value) ? value : min, min), max);
 
       function render() {
+        Object.assign(document.documentElement.dataset, {
+          hourlyRate: String(state.hourlyRate), weeklyHours: String(state.weeklyHours),
+          sprintWeeks: String(state.sprintWeeks), cellCount: String(state.cellCount)
+        });
         $("hourly-rate").value = state.hourlyRate;
         $("weekly-hours").value = state.weeklyHours;
         $("sprint-weeks").value = state.sprintWeeks;
@@ -398,10 +484,31 @@
         if (visible) panel.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
+      function downloadWebProposal() {
+        const copy = document.documentElement.cloneNode(true);
+        document.querySelectorAll("input").forEach((input, index) => {
+          const copiedInput = copy.querySelectorAll("input")[index];
+          copiedInput.setAttribute("value", input.value);
+          if (input.checked) copiedInput.setAttribute("checked", "");
+          else copiedInput.removeAttribute("checked");
+        });
+        const html = `<!doctype html>\n${copy.outerHTML}`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "propuesta-trabajo-atomdev-serviu.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
       $("settings-toggle").addEventListener("click", () => toggleSettings());
       $("settings-from-close").addEventListener("click", () => toggleSettings(true));
       $("reset-button").addEventListener("click", () => { Object.assign(state, defaults); render(); });
       [["hourly-rate", "hourlyRate", 0, 999], ["weekly-hours", "weeklyHours", 1, 168], ["sprint-weeks", "sprintWeeks", 1, 8], ["cell-count", "cellCount", 1, 20]].forEach(([id, key, min, max]) => $(id).addEventListener("input", (event) => { state[key] = clamp(event.target.valueAsNumber, min, max); render(); }));
+      $("download-html-button").addEventListener("click", downloadWebProposal);
       $("print-button").addEventListener("click", () => window.print());
       render();
     })();

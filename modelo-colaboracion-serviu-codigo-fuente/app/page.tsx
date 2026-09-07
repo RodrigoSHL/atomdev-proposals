@@ -150,6 +150,54 @@ export default function Home() {
     }
   };
 
+  const downloadWebProposal = () => {
+    const snapshot = document.documentElement.cloneNode(true) as HTMLElement;
+    const css = Array.from(document.styleSheets)
+      .map((sheet) => {
+        try {
+          return Array.from(sheet.cssRules, (rule) => rule.cssText).join("\n");
+        } catch {
+          return "";
+        }
+      })
+      .join("\n");
+
+    snapshot.querySelectorAll('link[rel="stylesheet"], style, script').forEach((node) => node.remove());
+    const offlineStyle = document.createElement("style");
+    offlineStyle.textContent = css;
+    snapshot.querySelector("head")?.appendChild(offlineStyle);
+
+    const liveInputs = Array.from(document.querySelectorAll<HTMLInputElement>("input"));
+    const copiedInputs = Array.from(snapshot.querySelectorAll<HTMLInputElement>("input"));
+    liveInputs.forEach((input, index) => {
+      const copiedInput = copiedInputs[index];
+      if (!copiedInput) return;
+      copiedInput.setAttribute("value", input.value);
+      if (input.checked) copiedInput.setAttribute("checked", "");
+      else copiedInput.removeAttribute("checked");
+    });
+
+    const offlineScript = document.createElement("script");
+    offlineScript.textContent = `
+      document.getElementById("print-button")?.addEventListener("click", () => window.print());
+      document.getElementById("download-html-button")?.remove();
+      document.getElementById("toggle-settings-button")?.remove();
+      document.getElementById("fullscreen-button")?.remove();
+    `;
+    snapshot.querySelector("body")?.appendChild(offlineScript);
+
+    const html = `<!doctype html>\n${snapshot.outerHTML}`;
+    const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "modelo-colaboracion-serviu.html";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
   return (
     <main className="site-shell">
       <header className="topbar">
@@ -161,14 +209,27 @@ export default function Home() {
           </span>
         </a>
         <nav className="top-actions" aria-label="Controles de presentación">
-          <button className="button button-ghost" onClick={() => setShowSettings((value) => !value)}>
+          <button id="toggle-settings-button" className="button button-ghost" onClick={() => setShowSettings((value) => !value)}>
             {showSettings ? "Ocultar configuración" : "Configurar"}
           </button>
-          <button className="button button-ghost desktop-action" onClick={requestFullscreen}>
+          <button id="fullscreen-button" className="button button-ghost desktop-action" onClick={requestFullscreen}>
             Pantalla completa
           </button>
-          <button className="button button-primary" onClick={() => window.print()}>
-            Imprimir / PDF
+          <button
+            id="download-html-button"
+            className="button button-ghost"
+            title="Descarga una copia que funciona sin conexión"
+            onClick={downloadWebProposal}
+          >
+            Descargar web
+          </button>
+          <button
+            id="print-button"
+            className="button button-primary"
+            title="En la ventana de impresión selecciona Guardar como PDF"
+            onClick={() => window.print()}
+          >
+            Descargar PDF
           </button>
         </nav>
       </header>
