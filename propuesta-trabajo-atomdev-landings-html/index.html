@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Propuesta comercial de AtomDev para el desarrollo de una landing page odontológica profesional y escalable.">
+  <meta property="og:title" content="Propuesta comercial · Landing odontológica · AtomDev">
+  <meta property="og:description" content="Tres alternativas para desarrollar y hacer crecer la presencia digital de una clínica odontológica.">
+  <meta property="og:type" content="website">
+  <title>Propuesta comercial · Landing odontológica · AtomDev</title>
+  <style>
+    :root {
+      --ink: #5f6062;
+      --ink-deep: #45474a;
+      --ink-soft: #77797d;
+      --paper: #fafbfc;
+      --surface: #fff;
+      --line: #e1e5e8;
+      --teal: #08aabd;
+      --teal-dark: #007d91;
+      --teal-light: #e1f7fa;
+      --pink: #ff0a5c;
+      --pink-dark: #c90047;
+      --pink-light: #ffe5ee;
+      --shadow: 0 20px 55px rgba(75, 76, 78, .12);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Calibri, "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    button { font: inherit; color: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid rgba(8, 170, 189, .24); outline-offset: 3px; }
+    .site-shell { min-height: 100vh; overflow: hidden; }
+    .topbar { position: sticky; z-index: 50; top: 0; display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 12px clamp(22px, 5vw, 76px); border-bottom: 1px solid rgba(225,229,232,.9); background: rgba(250,251,252,.94); backdrop-filter: blur(16px); }
+    .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+    .brand-mark { display: grid; width: 46px; height: 46px; place-items: center; }
+    .brand-mark svg { display: block; width: 46px; height: 46px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 20px; font-weight: 600; letter-spacing: -.03em; }
+    .brand small { margin-top: 1px; color: var(--ink-soft); font-size: 12px; }
+    .top-actions, .top-nav { display: flex; align-items: center; gap: 8px; }
+    .top-nav { margin-right: 10px; }
+    .top-nav a { padding: 8px 9px; color: var(--ink-soft); font-size: 12px; text-decoration: none; }
+    .top-nav a:hover { color: var(--teal-dark); }
+    .button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease; }
+    .button:hover { transform: translateY(-1px); border-color: #b9c1c5; }
+    .button-primary { border-color: var(--teal); background: var(--teal); color: #fff; }
+    .button-primary:hover { border-color: var(--teal-dark); background: var(--teal-dark); }
+    .button-pink { border-color: var(--pink); background: var(--pink); color: #fff; }
+    .button-pink:hover { border-color: var(--pink-dark); background: var(--pink-dark); }
+    .button-ghost { border-color: transparent; background: transparent; }
+
+    .hero { position: relative; display: grid; grid-template-columns: minmax(0,1.32fr) minmax(300px,.68fr); gap: clamp(36px,8vw,105px); align-items: end; min-height: 640px; padding: clamp(82px,11vw,145px) clamp(22px,7vw,108px) clamp(72px,9vw,110px); background: radial-gradient(circle at 84% 19%, rgba(255,10,92,.12), transparent 28%), radial-gradient(circle at 10% 86%, rgba(8,170,189,.12), transparent 33%), var(--paper); }
+    .hero::before { position: absolute; top: 65px; right: 7vw; width: 170px; height: 170px; border: 1px solid rgba(8,170,189,.2); border-radius: 50%; content: ""; }
+    .hero::after { position: absolute; top: 108px; right: calc(7vw + 42px); width: 82px; height: 82px; border-radius: 50%; background: rgba(255,10,92,.12); content: ""; }
+    .hero-copy, .hero-summary { position: relative; z-index: 1; }
+    .hero-copy { max-width: 890px; }
+    .eyebrow, .section-kicker { color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+    .hero h1 { max-width: 900px; margin: 18px 0 24px; color: var(--ink-deep); font-size: clamp(46px,6.5vw,86px); font-weight: 500; letter-spacing: -.055em; line-height: .97; }
+    .hero-copy > p { max-width: 740px; margin: 0; color: var(--ink-soft); font-size: clamp(19px,2vw,25px); line-height: 1.48; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .hero-tags span { padding: 9px 12px; border: 1px solid rgba(8,170,189,.25); border-radius: 999px; background: rgba(255,255,255,.72); color: var(--teal-dark); font-size: 12px; font-weight: 600; }
+    .hero-summary { padding: 28px; border-top: 4px solid var(--pink); background: var(--surface); box-shadow: var(--shadow); }
+    .hero-summary > span, .hero-summary > small { display: block; color: var(--ink-soft); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+    .hero-summary h2 { margin: 12px 0 2px; color: var(--ink-deep); font-size: clamp(30px,4vw,52px); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+    .hero-summary h2 span { color: var(--pink); }
+    .hero-rule { height: 1px; margin: 22px 0; background: var(--line); }
+    .hero-summary p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+    .hero-summary strong { color: var(--ink-deep); }
+
+    .content-section { padding: clamp(76px,10vw,132px) clamp(22px,7vw,108px); border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: flex-start; gap: 18px; max-width: 980px; margin-bottom: clamp(40px,6vw,68px); }
+    .section-number { display: grid; flex: none; width: 48px; height: 48px; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal-dark); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .section-heading h2 { margin: 6px 0 0; color: var(--ink-deep); font-size: clamp(30px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .section-heading p { margin: 12px 0 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+
+    .intro-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(300px,.8fr); gap: clamp(28px,7vw,88px); align-items: start; }
+    .intro-copy { max-width: 760px; }
+    .intro-copy p { margin: 0 0 18px; color: var(--ink-soft); font-size: 20px; line-height: 1.6; }
+    .intro-copy strong { color: var(--ink-deep); }
+    .formal-note { padding: 23px; border-left: 4px solid var(--teal); background: var(--teal-light); color: var(--teal-dark); font-size: 14px; line-height: 1.5; }
+    .formal-note strong { display: block; margin-bottom: 6px; color: var(--teal-dark); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .value-points { display: grid; gap: 10px; }
+    .value-point { display: flex; gap: 13px; padding: 18px; border: 1px solid var(--line); background: var(--surface); }
+    .value-point i { display: grid; flex: none; width: 29px; height: 29px; place-items: center; border-radius: 50%; background: var(--pink-light); color: var(--pink-dark); font-style: normal; font-weight: 700; }
+    .value-point strong, .value-point small { display: block; }
+    .value-point strong { color: var(--ink-deep); font-size: 14px; }
+    .value-point small { margin-top: 3px; color: var(--ink-soft); font-size: 12px; line-height: 1.35; }
+
+    .scope-section { background: #f1f7f8; }
+    .scope-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; padding: 1px; border: 1px solid var(--line); background: var(--line); }
+    .scope-card { min-height: 190px; padding: 25px; background: var(--surface); }
+    .scope-card:nth-child(2n) { background: #fbfcfc; }
+    .scope-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .scope-card:nth-child(2n) .scope-icon { background: var(--pink-light); color: var(--pink-dark); }
+    .scope-card h3 { margin: 17px 0 8px; color: var(--ink-deep); font-size: 21px; font-weight: 500; letter-spacing: -.03em; }
+    .scope-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .scope-note { margin-top: 20px; padding: 20px 22px; border: 1px solid rgba(8,170,189,.22); background: var(--teal-light); color: var(--teal-dark); font-size: 13px; line-height: 1.5; }
+    .scope-note strong { color: var(--ink-deep); }
+
+    .plans-section { background: var(--surface); }
+    .plans-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; align-items: stretch; }
+    .plan-card { position: relative; display: flex; flex-direction: column; padding: 28px 24px 24px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .plan-card:nth-child(2) { border-color: rgba(255,10,92,.4); border-top-color: var(--pink); box-shadow: var(--shadow); }
+    .plan-card:nth-child(3) { border-top-color: var(--pink); background: #fffafb; }
+    .plan-badge { display: inline-flex; align-self: flex-start; padding: 6px 9px; border-radius: 999px; background: var(--pink-light); color: var(--pink-dark); font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .08em; }
+    .plan-card > span:not(.plan-badge) { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .plan-card:nth-child(2) > span:not(.plan-badge), .plan-card:nth-child(3) > span:not(.plan-badge) { color: var(--pink-dark); }
+    .plan-card h3 { margin: 13px 0 4px; color: var(--ink-deep); font-size: 28px; font-weight: 500; letter-spacing: -.04em; }
+    .plan-card > p:not(.plan-footnote) { min-height: 46px; margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .plan-price { display: flex; align-items: baseline; gap: 5px; margin: 21px 0 18px; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .plan-price strong { color: var(--ink-deep); font-size: 42px; font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+    .plan-price span { color: var(--ink-soft); font-size: 13px; }
+    .feature-list { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .feature-list li { position: relative; padding-left: 20px; color: var(--ink-soft); font-size: 13px; line-height: 1.35; }
+    .feature-list li::before { position: absolute; left: 0; top: 0; color: var(--teal); content: "✓"; font-weight: 700; }
+    .plan-card:nth-child(2) .feature-list li::before, .plan-card:nth-child(3) .feature-list li::before { color: var(--pink); }
+    .plan-footnote { margin: auto 0 0; padding-top: 20px; color: var(--ink-soft); font-size: 11px; line-height: 1.45; }
+    .plan-footnote strong { color: var(--ink-deep); }
+    .plans-legend { display: flex; justify-content: space-between; gap: 22px; margin-top: 20px; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .plans-legend strong { color: var(--ink-deep); }
+
+    .hosting-section { background: #f1f7f8; }
+    .hosting-layout { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1.25fr); gap: 20px; align-items: start; }
+    .infrastructure-card { padding: 28px; border: 1px solid var(--line); background: var(--surface); }
+    .infrastructure-card > span, .monthly-label { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .infrastructure-card h3 { margin: 9px 0 13px; color: var(--ink-deep); font-size: 29px; font-weight: 500; letter-spacing: -.04em; }
+    .infrastructure-card p { margin: 0 0 16px; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+    .infrastructure-card ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .infrastructure-card li { position: relative; padding-left: 20px; color: var(--ink-soft); font-size: 13px; line-height: 1.4; }
+    .infrastructure-card li::before { position: absolute; left: 0; color: var(--teal); content: "→"; font-weight: 700; }
+    .monthly-plans { min-width: 0; }
+    .monthly-label { display: block; margin-bottom: 13px; }
+    .monthly-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+    .monthly-card { padding: 22px 19px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .monthly-card:nth-child(2) { border-color: rgba(255,10,92,.36); border-top-color: var(--pink); box-shadow: 0 12px 28px rgba(75,76,78,.08); }
+    .monthly-card:nth-child(3) { border-top-color: var(--pink); }
+    .monthly-card h3 { margin: 8px 0 3px; color: var(--ink-deep); font-size: 23px; font-weight: 500; letter-spacing: -.03em; }
+    .monthly-price { display: block; margin-bottom: 16px; color: var(--pink); font-size: 26px; font-weight: 600; letter-spacing: -.04em; }
+    .monthly-price small { color: var(--ink-soft); font-size: 12px; font-weight: 400; letter-spacing: 0; }
+    .monthly-card .feature-list { gap: 8px; }
+    .monthly-card .feature-list li { font-size: 12px; }
+    .non-accumulative { margin: 17px 0 0; padding: 14px 16px; border-left: 4px solid var(--pink); background: var(--pink-light); color: var(--pink-dark); font-size: 12px; line-height: 1.45; }
+    .non-accumulative strong { color: var(--ink-deep); }
+
+    .growth-section { background: var(--ink-deep); color: #fff; }
+    .growth-section .section-number { border-color: rgba(255,255,255,.45); color: #fff; }
+    .growth-section .section-kicker { color: #70e0ea; }
+    .growth-section .section-heading h2 { color: #fff; }
+    .growth-section .section-heading p { color: rgba(255,255,255,.65); }
+    .growth-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(300px,.9fr); gap: 28px; align-items: stretch; }
+    .growth-copy { padding: 28px; background: rgba(255,255,255,.08); }
+    .growth-copy h3 { margin: 0 0 12px; color: #fff; font-size: 29px; font-weight: 500; letter-spacing: -.04em; }
+    .growth-copy p { margin: 0 0 18px; color: rgba(255,255,255,.68); font-size: 15px; line-height: 1.55; }
+    .growth-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .growth-list li { padding: 12px 13px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.78); font-size: 12px; line-height: 1.35; }
+    .growth-list li::before { margin-right: 7px; color: #70e0ea; content: "+"; font-weight: 700; }
+    .clinic-table { overflow: hidden; border: 1px solid rgba(255,255,255,.16); }
+    .clinic-row { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .clinic-row:last-child { border-bottom: 0; }
+    .clinic-row > span, .clinic-row > strong { padding: 16px 18px; }
+    .clinic-row > span { color: rgba(255,255,255,.68); font-size: 14px; }
+    .clinic-row > strong { color: #fff; font-size: 18px; font-weight: 500; text-align: right; }
+    .clinic-row.total { background: var(--pink); }
+    .clinic-row.total > span, .clinic-row.total > strong { color: #fff; }
+    .clinic-note { margin: 15px 0 0; color: rgba(255,255,255,.58); font-size: 11px; line-height: 1.5; }
+
+    .additional-section { background: var(--surface); }
+    .additional-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(300px,.9fr); gap: 28px; align-items: start; }
+    .additional-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+    .additional-card { padding: 21px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .additional-card:nth-child(2n) { border-top-color: var(--pink); background: #fffafb; }
+    .additional-card h3 { margin: 0 0 7px; color: var(--ink-deep); font-size: 19px; font-weight: 500; letter-spacing: -.03em; }
+    .additional-card strong { color: var(--pink); font-size: 15px; font-weight: 600; }
+    .additional-card p { margin: 8px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .conditions-card { padding: 26px; border-left: 4px solid var(--teal); background: var(--teal-light); }
+    .conditions-card > span { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .conditions-card h3 { margin: 9px 0 16px; color: var(--ink-deep); font-size: 27px; font-weight: 500; letter-spacing: -.04em; }
+    .conditions-card ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .conditions-card li { position: relative; padding-left: 21px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .conditions-card li::before { position: absolute; left: 0; color: var(--teal-dark); content: "✓"; font-weight: 700; }
+    .conditions-card strong { color: var(--ink-deep); }
+
+    .closing-section { padding-top: 85px; padding-bottom: 85px; background: var(--pink-light); }
+    .closing-card { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: clamp(28px,5vw,54px); border: 1px solid rgba(255,10,92,.23); background: var(--surface); box-shadow: var(--shadow); }
+    .closing-card h2 { margin: 0 0 10px; color: var(--ink-deep); font-size: clamp(29px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .closing-card p { max-width: 660px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.5; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 32px clamp(22px,7vw,108px); background: #45474a; color: #fff; }
+    footer strong, footer span { display: block; }
+    footer strong { font-size: 13px; }
+    footer span, footer p { color: rgba(255,255,255,.55); font-size: 11px; }
+    footer span { margin-top: 5px; }
+    footer p { max-width: 430px; margin: 0; text-align: right; line-height: 1.5; }
+
+    @media (max-width: 1080px) {
+      .top-nav { display: none; }
+      .scope-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-summary { max-width: 460px; }
+      .intro-grid, .hosting-layout, .growth-layout, .additional-layout { grid-template-columns: 1fr 1fr; }
+      .intro-copy, .formal-note { grid-column: 1 / -1; }
+      .value-points { grid-column: 1 / -1; grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .hosting-layout, .growth-layout, .additional-layout { grid-template-columns: 1fr; }
+      .plans-grid { grid-template-columns: 1fr 1fr; }
+      .plan-card:last-child { grid-column: span 2; }
+      .monthly-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    }
+    @media (max-width: 620px) {
+      .topbar { align-items: flex-start; gap: 14px; }
+      .brand small { display: none; }
+      .top-actions { flex-wrap: wrap; justify-content: flex-end; }
+      .button { min-height: 36px; padding: 0 11px; font-size: 11px; }
+      .hero { padding-top: 72px; }
+      .hero h1 { font-size: clamp(44px,13vw,67px); }
+      .hero::before, .hero::after { display: none; }
+      .plans-grid, .scope-grid, .monthly-grid, .additional-grid, .growth-list, .value-points { grid-template-columns: 1fr; }
+      .plan-card:last-child { grid-column: auto; }
+      .section-heading { flex-direction: column; }
+      .plans-legend { flex-direction: column; gap: 8px; }
+      footer { align-items: flex-start; flex-direction: column; }
+      footer p { text-align: left; }
+      .closing-card { align-items: flex-start; flex-direction: column; }
+    }
+    @media print {
+      :root { --paper: #fff; }
+      @page { margin: 10mm; size: A4 landscape; }
+      html, body { width: auto; min-width: 0; background: #fff; }
+      body { font-size: 10pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .site-shell { min-height: 0; overflow: visible; }
+      .topbar, .closing-card .button, footer { display: none !important; }
+      .hero, .content-section { width: 100%; min-height: 190mm; break-after: page; page-break-after: always; }
+      .hero { display: grid !important; grid-template-columns: minmax(0,1.32fr) minmax(72mm,.68fr) !important; gap: 12mm !important; align-items: center !important; height: 190mm; padding: 14mm; }
+      .hero h1 { margin: 5mm 0 6mm; font-size: 16mm; line-height: .98; }
+      .hero-copy > p { font-size: 4.4mm; line-height: 1.4; }
+      .hero-tags { gap: 2mm; margin-top: 7mm; }
+      .hero-tags span { padding: 2.2mm 3mm; font-size: 8pt; }
+      .hero-summary { max-width: none; padding: 7mm; box-shadow: 0 5mm 14mm rgba(75,76,78,.12); }
+      .hero-summary h2 { margin: 3mm 0 1mm; font-size: 11mm; }
+      .hero-summary p { font-size: 8.5pt; }
+      .content-section { padding: 10mm 12mm; break-before: page; page-break-before: always; }
+      .section-heading { flex-direction: row !important; gap: 4mm; max-width: none; margin-bottom: 7mm; }
+      .section-number { width: 11mm; height: 11mm; font-size: 8pt; }
+      .section-heading h2 { margin-top: 1.5mm; font-size: 8.2mm; line-height: 1.04; }
+      .section-heading p { margin-top: 2.5mm; font-size: 9pt; line-height: 1.35; }
+      .intro-grid, .hosting-layout, .growth-layout, .additional-layout { grid-template-columns: minmax(0,1.2fr) minmax(75mm,.8fr) !important; gap: 7mm; }
+      .intro-copy, .formal-note, .value-points { grid-column: auto !important; }
+      .intro-copy p { margin-bottom: 3mm; font-size: 10.5pt; line-height: 1.45; }
+      .formal-note { padding: 4mm; font-size: 8pt; }
+      .value-points { display: grid; grid-template-columns: 1fr !important; gap: 2.5mm; }
+      .value-point { padding: 3.5mm; }
+      .scope-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+      .scope-card { min-height: 34mm; padding: 4mm; }
+      .scope-card h3 { margin: 3mm 0 1.5mm; font-size: 14pt; }
+      .scope-card p { font-size: 7.5pt; }
+      .scope-note { margin-top: 4mm; padding: 3.5mm; font-size: 8pt; }
+      .plans-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 3mm; }
+      .plan-card { padding: 5mm 4mm; }
+      .plan-card > p:not(.plan-footnote) { min-height: 13mm; font-size: 8pt; }
+      .plan-card h3 { margin: 2mm 0 1mm; font-size: 17pt; }
+      .plan-price { margin: 3mm 0 3mm; padding-bottom: 3mm; }
+      .plan-price strong { font-size: 25pt; }
+      .feature-list { gap: 1.4mm; }
+      .feature-list li { font-size: 7.2pt; }
+      .plan-footnote { padding-top: 3mm; font-size: 6.8pt; }
+      .plans-legend { margin-top: 3mm; font-size: 7.5pt; }
+      .infrastructure-card, .growth-copy, .conditions-card { padding: 5mm; }
+      .infrastructure-card h3, .growth-copy h3, .conditions-card h3 { margin: 2mm 0 3mm; font-size: 18pt; }
+      .infrastructure-card p, .growth-copy p { font-size: 8.5pt; }
+      .infrastructure-card li, .conditions-card li { font-size: 7.5pt; }
+      .monthly-label { margin-bottom: 2mm; }
+      .monthly-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 2mm; }
+      .monthly-card { padding: 4mm 3mm; }
+      .monthly-card h3 { margin: 1mm 0; font-size: 15pt; }
+      .monthly-price { margin-bottom: 3mm; font-size: 17pt; }
+      .monthly-card .feature-list li { font-size: 7pt; }
+      .non-accumulative { margin-top: 3mm; padding: 2.5mm 3mm; font-size: 7pt; }
+      .growth-layout, .additional-layout { grid-template-columns: minmax(0,1.1fr) minmax(78mm,.9fr) !important; gap: 5mm; }
+      .growth-list { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2mm; }
+      .growth-list li { padding: 2.5mm; font-size: 7pt; }
+      .clinic-row > span, .clinic-row > strong { padding: 3mm 4mm; }
+      .clinic-row > span { font-size: 8pt; }
+      .clinic-row > strong { font-size: 10pt; }
+      .clinic-note { margin-top: 2mm; font-size: 7pt; }
+      .additional-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2mm; }
+      .additional-card { padding: 3.5mm; }
+      .additional-card h3 { font-size: 12pt; }
+      .additional-card strong, .additional-card p { font-size: 7.5pt; }
+      .closing-section { display: grid; align-items: center; break-after: auto; page-break-after: auto; }
+      .closing-card { padding: 10mm; box-shadow: none; }
+      .plan-card, .scope-card, .infrastructure-card, .monthly-card, .growth-copy, .clinic-table, .additional-card, .conditions-card, .closing-card { break-inside: avoid; page-break-inside: avoid; }
+      p, li { orphans: 3; widows: 3; }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Símbolo AtomDev">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#5f6062" stroke-width="1.8"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(52 24 24)"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(-52 24 24)"/>
+            <circle cx="24" cy="24" r="5.4" fill="#08aabd"/>
+            <circle cx="29.8" cy="8.8" r="2.6" fill="#08aabd"/>
+            <circle cx="10.5" cy="22.5" r="2.6" fill="#ff0a5c"/>
+            <circle cx="35.5" cy="35.5" r="2.6" fill="#ff0a5c"/>
+          </svg>
+        </span>
+        <span><strong>AtomDev</strong><small>Propuesta comercial</small></span>
+      </a>
+      <div class="top-actions">
+        <nav class="top-nav" aria-label="Secciones de la propuesta">
+          <a href="#alcance">Alcance</a><a href="#planes">Planes</a><a href="#hosting">Hosting</a><a href="#crecimiento">Crecimiento</a>
+        </nav>
+        <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">PROPUESTA COMERCIAL · ATOMDEV + CLÍNICA ODONTOLÓGICA</span>
+        <h1>Una presencia digital preparada para atraer y convertir pacientes.</h1>
+        <p>Desarrollo de una landing page odontológica profesional, responsive y orientada a contacto, con una base tecnológica que puede crecer junto a las clínicas del grupo.</p>
+        <div class="hero-tags" aria-label="Características de la propuesta"><span>Diseño profesional</span><span>SEO técnico inicial</span><span>WhatsApp y reservas</span><span>Arquitectura escalable</span></div>
+      </div>
+      <aside class="hero-summary" aria-label="Resumen comercial de la propuesta">
+        <span>Desde</span>
+        <h2><span>590 €</span></h2>
+        <small>Landing Essential · pago único</small>
+        <div class="hero-rule"></div>
+        <p><strong>790 €</strong> para la opción recomendada Professional.<br>Servicios de hosting y mantenimiento disponibles desde <strong>49 €/mes</strong>.</p>
+      </aside>
+    </section>
+
+    <section class="content-section" id="introduccion">
+      <div class="section-heading"><span class="section-number">01</span><div><span class="section-kicker">CONTEXTO Y OBJETIVO</span><h2>Una landing clara para convertir búsquedas en conversaciones.</h2><p>La propuesta está pensada para una clínica odontológica en Europa, probablemente España, con una primera web que pueda convertirse en la base de futuras clínicas.</p></div></div>
+      <div class="intro-grid">
+        <div class="intro-copy"><p>AtomDev propone desarrollar una <strong>landing page profesional y enfocada a negocio</strong>: explicar los servicios de la clínica, transmitir confianza y facilitar que un paciente contacte o solicite una reserva desde cualquier dispositivo.</p><p>La solución combinará una experiencia visual cuidada con una implementación técnica preparada para indexación, medición y evolución. El posicionamiento orgánico continuo podrá contratarse como servicio adicional, sin presentar resultados garantizados.</p><div class="formal-note"><strong>Enfoque de la propuesta</strong>El alcance contempla SEO técnico inicial y configuración para indexación en Google. La visibilidad y el posicionamiento SEO sostenido dependen de trabajo continuo, competencia, contenidos y otros factores externos.</div></div>
+        <div class="value-points"><div class="value-point"><i>01</i><div><strong>Confianza</strong><small>Diseño, contenidos y señales de credibilidad para una primera impresión profesional.</small></div></div><div class="value-point"><i>02</i><div><strong>Conversión</strong><small>Llamadas a la acción visibles, WhatsApp, formulario y caminos claros hacia la reserva.</small></div></div><div class="value-point"><i>03</i><div><strong>Escalabilidad</strong><small>Una arquitectura reutilizable para adaptar nuevas clínicas con mayor eficiencia.</small></div></div></div>
+      </div>
+    </section>
+
+    <section class="content-section scope-section" id="alcance">
+      <div class="section-heading"><span class="section-number">02</span><div><span class="section-kicker">ALCANCE BASE</span><h2>Todo lo necesario para publicar una landing odontológica sólida.</h2><p>La base funcional se adapta al plan elegido y cubre experiencia, contacto, analítica, indexación y publicación.</p></div></div>
+      <div class="scope-grid">
+        <article class="scope-card"><span class="scope-icon">UX</span><h3>Diseño responsive</h3><p>Diseño profesional y adaptación para escritorio, tablet y móvil, con una jerarquía clara de contenidos.</p></article>
+        <article class="scope-card"><span class="scope-icon">CTA</span><h3>Contacto y reserva</h3><p>Botón directo de WhatsApp, formulario de contacto y llamadas a la acción para solicitar una cita.</p></article>
+        <article class="scope-card"><span class="scope-icon">MAP</span><h3>Clínica y ubicación</h3><p>Presentación de la clínica, tratamientos o servicios, testimonios, datos de contacto y Google Maps.</p></article>
+        <article class="scope-card"><span class="scope-icon">SEO</span><h3>SEO técnico inicial</h3><p>Metatags, sitemap.xml, robots.txt, Open Graph, favicon y configuración inicial para indexación en Google.</p></article>
+        <article class="scope-card"><span class="scope-icon">DATA</span><h3>Medición y datos</h3><p>Google Analytics, Google Search Console y datos estructurados Schema.org para Dentist/LocalBusiness.</p></article>
+        <article class="scope-card"><span class="scope-icon">WEB</span><h3>Rendimiento y publicación</h3><p>Optimización de imágenes, optimización básica de velocidad, SSL, despliegue y publicación.</p></article>
+      </div>
+      <div class="scope-note"><strong>Materiales del cliente:</strong> para avanzar se requieren textos, fotografías, logotipo, datos de contacto, dominio y accesos necesarios. El alcance de contenidos y traducciones se define según el plan y los servicios adicionales contratados.</div>
+    </section>
+
+    <section class="content-section plans-section" id="planes">
+      <div class="section-heading"><span class="section-number">03</span><div><span class="section-kicker">ALTERNATIVAS DE DESARROLLO</span><h2>Tres niveles para comenzar con el alcance adecuado.</h2><p>Cada alternativa permite ajustar profundidad, acompañamiento y nivel de optimización a la etapa actual de la clínica.</p></div></div>
+      <div class="plans-grid">
+        <article class="plan-card"><span>PLAN 01</span><h3>Landing Essential</h3><p>Una base profesional para publicar rápidamente con los elementos esenciales de contacto.</p><div class="plan-price"><strong>590 €</strong><span>pago único</span></div><ul class="feature-list"><li>Landing page de hasta 6 secciones</li><li>Diseño responsive</li><li>WhatsApp y Google Maps</li><li>Formulario y llamadas a la acción</li><li>SEO técnico básico, sitemap y metadatos</li><li>SSL y publicación</li><li>1 ronda de modificaciones</li></ul><p class="plan-footnote"><strong>El cliente entrega:</strong> textos, fotografías, logo, dominio y hosting.</p></article>
+        <article class="plan-card"><span class="plan-badge">OPCIÓN RECOMENDADA</span><span>PLAN 02</span><h3>Landing Professional</h3><p>La alternativa equilibrada para una clínica que busca presencia, medición y mejor preparación técnica.</p><div class="plan-price"><strong>790 €</strong><span>pago único</span></div><ul class="feature-list"><li>Diseño personalizado y 8–10 secciones</li><li>Responsive, WhatsApp, Maps y formulario</li><li>Testimonios y optimización de imágenes</li><li>Google Analytics y Search Console</li><li>Schema Dentist/LocalBusiness</li><li>SEO técnico, indexación, metadatos y Open Graph</li><li>Favicon, velocidad, cookies/privacidad básica</li><li>SSL, despliegue y 2 rondas de modificaciones</li><li>30 días de garantía para errores posteriores a publicación</li></ul><p class="plan-footnote"><strong>Recomendada:</strong> cubre el equilibrio entre conversión, medición y una base preparada para crecer.</p></article>
+        <article class="plan-card"><span>PLAN 03</span><h3>Landing Premium</h3><p>Una experiencia más trabajada para diferenciar la clínica y profundizar la optimización de conversión.</p><div class="plan-price"><strong>1.090 €</strong><span>pago único</span></div><ul class="feature-list"><li>Todo lo incluido en Landing Professional</li><li>Apoyo en definición de estructura de contenidos</li><li>Optimización de textos orientada a SEO</li><li>Diseño y experiencia visual más trabajada</li><li>Animaciones y rendimiento avanzado</li><li>Configuración avanzada de conversiones</li><li>Integración con reservas si es técnicamente viable</li><li>3 rondas de modificaciones</li></ul><p class="plan-footnote"><strong>Alcance:</strong> una integración externa de reservas se valida antes de comprometerla.</p></article>
+      </div>
+      <div class="plans-legend"><span><strong>SEO:</strong> se incluye configuración técnica inicial; no se garantiza posicionamiento en Google.</span><span><strong>Precios:</strong> expresados en euros y sujetos a validación final de alcance.</span></div>
+    </section>
+
+    <section class="content-section hosting-section" id="hosting">
+      <div class="section-heading"><span class="section-number">04</span><div><span class="section-kicker">HOSTING Y MANTENIMIENTO</span><h2>La infraestructura puede quedar en manos del cliente o de AtomDev.</h2><p>Después del desarrollo inicial, la clínica puede elegir autonomía operativa o un servicio administrado con soporte recurrente.</p></div></div>
+      <div class="hosting-layout">
+        <article class="infrastructure-card"><span>MODALIDAD 01</span><h3>Infraestructura del cliente</h3><p>El cliente contrata y administra su propio dominio y hosting. AtomDev realiza el desarrollo, configuración y despliegue.</p><ul><li>Dominio y proveedor bajo gestión del cliente.</li><li>Configuración y publicación de la landing.</li><li>Mantenimiento mensual opcional.</li></ul></article>
+        <div class="monthly-plans"><span class="monthly-label">MODALIDAD 02 · SERVICIO ADMINISTRADO</span><div class="monthly-grid">
+          <article class="monthly-card"><span>CARE</span><h3>Care</h3><span class="monthly-price">49 €<small>/mes</small></span><ul class="feature-list"><li>Hosting</li><li>SSL</li><li>Backups</li><li>Monitorización básica</li></ul></article>
+          <article class="monthly-card"><span class="plan-badge">RECOMENDADO</span><h3>Care Plus</h3><span class="monthly-price">89 €<small>/mes</small></span><ul class="feature-list"><li>Todo Care</li><li>Actualizaciones</li><li>Soporte</li><li>Hasta 1 hora mensual de modificaciones</li><li>Seguimiento de Analytics/Search Console</li></ul></article>
+          <article class="monthly-card"><span>CARE PRO</span><h3>Care Pro</h3><span class="monthly-price">149 €<small>/mes</small></span><ul class="feature-list"><li>Todo Care Plus</li><li>Hasta 2 horas mensuales de modificaciones</li><li>Soporte prioritario</li><li>Revisión SEO técnica periódica</li><li>Revisión básica de rendimiento</li></ul></article>
+        </div><p class="non-accumulative"><strong>Importante:</strong> las horas incluidas en los planes mensuales no son acumulables entre meses.</p></div>
+      </div>
+    </section>
+
+    <section class="content-section growth-section" id="crecimiento">
+      <div class="section-heading"><span class="section-number">05</span><div><span class="section-kicker">MULTICLÍNICA</span><h2>Una primera clínica puede ser la base de todo el grupo.</h2><p>La arquitectura tecnológica se puede reutilizar y adaptar para nuevas ubicaciones, reduciendo fricción y manteniendo coherencia.</p></div></div>
+      <div class="growth-layout">
+        <div class="growth-copy"><h3>Crecer sin empezar de cero.</h3><p>Cada nueva clínica puede conservar la estructura y los componentes de la primera web, adaptando su propuesta local y su contenido para conectar con pacientes de su zona.</p><ul class="growth-list"><li>Ubicación y fotografías</li><li>Servicios y tratamientos</li><li>Equipo y especialidades</li><li>Datos de contacto</li><li>WhatsApp y Google Maps</li><li>Contenido y SEO local</li><li>Branding cuando corresponda</li><li>Configuración analítica</li></ul></div>
+        <div><div class="clinic-table"><div class="clinic-row"><span>1 clínica</span><strong>790 €</strong></div><div class="clinic-row"><span>2 clínicas</span><strong>1.290 €</strong></div><div class="clinic-row"><span>3 clínicas</span><strong>1.690 €</strong></div><div class="clinic-row total"><span>5 clínicas</span><strong>2.490 €</strong></div></div><p class="clinic-note">Valores de referencia utilizando la misma arquitectura. Para volúmenes mayores: <strong>cotización especial</strong>. No se comprometen descuentos adicionales sin evaluación previa.</p></div>
+      </div>
+    </section>
+
+    <section class="content-section additional-section" id="adicionales">
+      <div class="section-heading"><span class="section-number">06</span><div><span class="section-kicker">SERVICIOS ADICIONALES Y CONDICIONES</span><h2>La propuesta puede ampliarse cuando el negocio lo necesite.</h2><p>Estos servicios quedan fuera del alcance base y se cotizan según el contenido, la tecnología y el nivel de dedicación requerido.</p></div></div>
+      <div class="additional-layout">
+        <div class="additional-grid"><article class="additional-card"><h3>Idioma adicional</h3><strong>desde 200–350 €</strong><p>Adaptación y publicación de una versión adicional, según extensión y traducción disponible.</p></article><article class="additional-card"><h3>Página o sección adicional</h3><strong>desde 120–180 €</strong><p>Contenido independiente fuera de las secciones incluidas en el plan seleccionado.</p></article><article class="additional-card"><h3>Integración con reservas</h3><strong>desde 250–600 €</strong><p>Conexión con un sistema externo, previa revisión de factibilidad y alcance.</p></article><article class="additional-card"><h3>Blog</h3><strong>desde 200 €</strong><p>Base funcional para publicar contenidos y apoyar una estrategia SEO continua.</p></article></div>
+        <aside class="conditions-card"><span>PARA AVANZAR</span><h3>Un siguiente paso concreto.</h3><ul><li>Confirmar la clínica, plan y modalidad de infraestructura.</li><li>Compartir identidad visual, contenidos, fotografías y accesos.</li><li>Validar el mapa de secciones, responsables y fechas.</li><li><strong>El SEO continuo, contenidos y nuevas landing pages se cotizan como servicios adicionales.</strong></li></ul></aside>
+      </div>
+    </section>
+
+    <section class="content-section closing-section" id="cierre">
+      <div class="closing-card"><div><span class="section-kicker">CIERRE DE LA PROPUESTA</span><h2>Una primera web preparada para crecer con la clínica.</h2><p>AtomDev puede acompañar el lanzamiento de la primera landing y la evolución posterior hacia un ecosistema digital para todas las clínicas del grupo.</p></div><button class="button button-pink" id="print-from-close">Descargar PDF</button></div>
+    </section>
+
+    <footer><div><strong>AtomDev · Propuesta comercial para clínica odontológica</strong><span>Landing page, infraestructura y crecimiento multiclinica · Valores expresados en euros</span></div><p>Propuesta orientativa. El alcance definitivo se confirma antes de iniciar la ejecución.</p></footer>
+  </main>
+
+  <script>
+    (() => {
+      function downloadWebProposal() {
+        const copy = document.documentElement.cloneNode(true);
+        const script = copy.querySelector("script");
+        if (script) script.remove();
+        const html = `<!doctype html>\n${copy.outerHTML}`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "propuesta-landing-odontologica-atomdev.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      document.getElementById("download-html-button").addEventListener("click", downloadWebProposal);
+      document.getElementById("print-button").addEventListener("click", () => window.print());
+      document.getElementById("print-from-close").addEventListener("click", () => window.print());
+    })();
+  </script>
+</body>
+</html>
