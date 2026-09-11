@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1800" height="1000" viewBox="0 0 1800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Tarjeta de presentación de AtomDev</title>
+  <desc id="desc">AtomDev, desarrollo y soluciones digitales. WhatsApp 569 93611880, correo shl.catalan@gmail.com y sitio web www.atomdev.cl.</desc>
+
+  <defs>
+    <linearGradient id="darkPanel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#45474A"/>
+      <stop offset="1" stop-color="#343638"/>
+    </linearGradient>
+    <linearGradient id="tealGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08AABD" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#007D91" stop-opacity=".95"/>
+    </linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M 42 0 L 0 0 0 42" fill="none" stroke="#FFFFFF" stroke-opacity=".045" stroke-width="1"/>
+    </pattern>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#172027" flood-opacity=".18"/>
+    </filter>
+    <clipPath id="cardClip">
+      <rect x="18" y="18" width="1764" height="964" rx="28"/>
+    </clipPath>
+  </defs>
+
+  <rect x="18" y="18" width="1764" height="964" rx="28" fill="#FFFFFF" filter="url(#softShadow)"/>
+  <g clip-path="url(#cardClip)">
+    <rect width="1800" height="1000" fill="#FAFBFC"/>
+    <rect width="700" height="1000" fill="url(#darkPanel)"/>
+    <rect width="700" height="1000" fill="url(#grid)"/>
+    <path d="M 510 0 C 610 210 540 360 700 510 C 555 680 625 820 700 1000 L 430 1000 C 315 795 430 650 470 500 C 405 325 470 180 390 0 Z" fill="#08AABD" opacity=".10"/>
+    <path d="M 0 836 C 196 762 330 806 420 1000 L 0 1000 Z" fill="#FF0A5C" opacity=".10"/>
+
+    <!-- AtomDev symbol -->
+    <g transform="translate(92 112)">
+      <circle cx="116" cy="116" r="101" fill="none" stroke="#F7F8F8" stroke-opacity=".88" stroke-width="7"/>
+      <ellipse cx="116" cy="116" rx="38" ry="96" fill="none" stroke="#F7F8F8" stroke-opacity=".88" stroke-width="7"/>
+      <ellipse cx="116" cy="116" rx="38" ry="96" fill="none" stroke="#F7F8F8" stroke-opacity=".88" stroke-width="7" transform="rotate(52 116 116)"/>
+      <ellipse cx="116" cy="116" rx="38" ry="96" fill="none" stroke="#F7F8F8" stroke-opacity=".88" stroke-width="7" transform="rotate(-52 116 116)"/>
+      <circle cx="116" cy="116" r="26" fill="url(#tealGlow)"/>
+      <circle cx="143" cy="43" r="13" fill="#08AABD"/>
+      <circle cx="57" cy="109" r="13" fill="#FF0A5C"/>
+      <circle cx="167" cy="167" r="13" fill="#FF0A5C"/>
+    </g>
+
+    <text x="92" y="432" fill="#FFFFFF" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="84" font-weight="700" letter-spacing="-3">AtomDev</text>
+    <rect x="96" y="476" width="106" height="8" rx="4" fill="#08AABD"/>
+    <rect x="216" y="476" width="54" height="8" rx="4" fill="#FF0A5C"/>
+    <text x="96" y="562" fill="#FFFFFF" fill-opacity=".82" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="30" font-weight="500" letter-spacing="1.4">DESARROLLO Y SOLUCIONES</text>
+    <text x="96" y="604" fill="#FFFFFF" fill-opacity=".82" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="30" font-weight="500" letter-spacing="1.4">DIGITALES A MEDIDA</text>
+    <text x="96" y="898" fill="#FFFFFF" fill-opacity=".44" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="20" letter-spacing="3">ATOMDEV.CL</text>
+
+    <!-- Contact panel -->
+    <text x="820" y="150" fill="#007D91" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="20" font-weight="700" letter-spacing="4">CONTACTO</text>
+    <text x="820" y="244" fill="#45474A" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="48" font-weight="600" letter-spacing="-1.2">Conversemos sobre</text>
+    <text x="820" y="304" fill="#45474A" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="48" font-weight="600" letter-spacing="-1.2">tu próximo proyecto.</text>
+    <rect x="820" y="360" width="820" height="1" fill="#E1E5E8"/>
+
+    <!-- WhatsApp -->
+    <g transform="translate(820 438)">
+      <circle cx="25" cy="25" r="25" fill="#E1F7FA"/>
+      <path d="M14 47 L18 36 A16 16 0 1 1 30 40 Z" fill="none" stroke="#007D91" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M19 20 C20 17 22 17 24 20 L26 23 C27 25 26 26 24 27 C26 31 29 33 33 34 C34 32 35 31 37 32 L40 34 C42 35 41 38 39 40 C35 43 27 40 22 36 C17 32 14 25 16 21 Z" fill="#007D91"/>
+      <text x="76" y="18" fill="#77797D" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" letter-spacing="1.7">WHATSAPP</text>
+      <text x="76" y="54" fill="#45474A" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="32" font-weight="600">+56 9 9361 1880</text>
+    </g>
+
+    <!-- Email -->
+    <g transform="translate(820 570)">
+      <circle cx="25" cy="25" r="25" fill="#FFE5EE"/>
+      <rect x="11" y="15" width="28" height="20" rx="3" fill="none" stroke="#C90047" stroke-width="3"/>
+      <path d="M12 17 L25 27 L38 17" fill="none" stroke="#C90047" stroke-width="3" stroke-linejoin="round"/>
+      <text x="76" y="18" fill="#77797D" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" letter-spacing="1.7">CORREO</text>
+      <text x="76" y="54" fill="#45474A" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="32" font-weight="600">shl.catalan@gmail.com</text>
+    </g>
+
+    <!-- Website -->
+    <g transform="translate(820 702)">
+      <circle cx="25" cy="25" r="25" fill="#E1F7FA"/>
+      <circle cx="25" cy="25" r="13" fill="none" stroke="#007D91" stroke-width="3"/>
+      <path d="M12 25 H38 M25 12 C19 16 19 34 25 38 M25 12 C31 16 31 34 25 38" fill="none" stroke="#007D91" stroke-width="2.5"/>
+      <text x="76" y="18" fill="#77797D" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" letter-spacing="1.7">SITIO WEB</text>
+      <text x="76" y="54" fill="#45474A" font-family="Avenir Next, Helvetica Neue, Arial, sans-serif" font-size="32" font-weight="600">www.atomdev.cl</text>
+    </g>
+
+    <rect x="820" y="868" width="820" height="1" fill="#E1E5E8"/>
+    <text x="820" y="920" fill="#08AABD" font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="700" letter-spacing="2.8">TECNOLOGÍA · DISEÑO · EVOLUCIÓN</text>
+    <circle cx="1618" cy="916" r="7" fill="#FF0A5C"/>
+  </g>
+</svg>
