@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Propuesta de trabajo y modelo de colaboración ágil entre AtomDev y Serviu Metropolitano.">
+  <title>Propuesta de trabajo · AtomDev + Serviu Metropolitano</title>
+  <style>
+    :root {
+      --ink: #5f6062;
+      --ink-deep: #45474a;
+      --ink-soft: #77797d;
+      --paper: #fafbfc;
+      --surface: #fff;
+      --line: #e1e5e8;
+      --teal: #08aabd;
+      --teal-dark: #007d91;
+      --teal-light: #e1f7fa;
+      --pink: #ff0a5c;
+      --pink-dark: #c90047;
+      --pink-light: #ffe5ee;
+      --shadow: 0 20px 55px rgba(75, 76, 78, .12);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Calibri, "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid rgba(8, 170, 189, .24); outline-offset: 3px; }
+    .site-shell { min-height: 100vh; overflow: hidden; }
+    .topbar { position: sticky; z-index: 50; top: 0; display: flex; align-items: center; justify-content: space-between; min-height: 76px; padding: 12px clamp(22px, 5vw, 76px); border-bottom: 1px solid rgba(225,229,232,.9); background: rgba(250,251,252,.94); backdrop-filter: blur(16px); }
+    .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+    .brand-mark { display: grid; width: 46px; height: 46px; place-items: center; }
+    .brand-mark svg { display: block; width: 46px; height: 46px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 20px; font-weight: 600; letter-spacing: -.03em; }
+    .brand small { margin-top: 1px; color: var(--ink-soft); font-size: 12px; }
+    .top-actions, .top-nav { display: flex; align-items: center; gap: 8px; }
+    .top-nav { margin-right: 10px; }
+    .top-nav a { padding: 8px 9px; color: var(--ink-soft); font-size: 12px; text-decoration: none; }
+    .top-nav a:hover { color: var(--teal-dark); }
+    .button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease; }
+    .button:hover { transform: translateY(-1px); border-color: #b9c1c5; }
+    .button-primary { border-color: var(--teal); background: var(--teal); color: #fff; }
+    .button-primary:hover { border-color: var(--teal-dark); background: var(--teal-dark); }
+    .button-pink { border-color: var(--pink); background: var(--pink); color: #fff; }
+    .button-pink:hover { border-color: var(--pink-dark); background: var(--pink-dark); }
+    .button-ghost { border-color: transparent; background: transparent; }
+    .button-small { min-height: 36px; padding-inline: 13px; font-size: 12px; }
+
+    .hero { position: relative; display: grid; grid-template-columns: minmax(0,1.32fr) minmax(300px,.68fr); gap: clamp(36px,8vw,105px); align-items: end; min-height: 640px; padding: clamp(82px,11vw,145px) clamp(22px,7vw,108px) clamp(72px,9vw,110px); background: radial-gradient(circle at 84% 19%, rgba(255,10,92,.12), transparent 28%), radial-gradient(circle at 10% 86%, rgba(8,170,189,.12), transparent 33%), var(--paper); }
+    .hero::before { position: absolute; top: 65px; right: 7vw; width: 170px; height: 170px; border: 1px solid rgba(8,170,189,.2); border-radius: 50%; content: ""; }
+    .hero::after { position: absolute; top: 108px; right: calc(7vw + 42px); width: 82px; height: 82px; border-radius: 50%; background: rgba(255,10,92,.12); content: ""; }
+    .hero-copy, .hero-summary { position: relative; z-index: 1; }
+    .hero-copy { max-width: 890px; }
+    .eyebrow, .section-kicker { color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+    .hero h1 { max-width: 900px; margin: 18px 0 24px; color: var(--ink-deep); font-size: clamp(46px,6.5vw,86px); font-weight: 500; letter-spacing: -.055em; line-height: .97; }
+    .hero-copy > p { max-width: 740px; margin: 0; color: var(--ink-soft); font-size: clamp(19px,2vw,25px); line-height: 1.48; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .hero-tags span { padding: 9px 12px; border: 1px solid rgba(8,170,189,.25); border-radius: 999px; background: rgba(255,255,255,.72); color: var(--teal-dark); font-size: 12px; font-weight: 600; }
+    .hero-summary { padding: 28px; border-top: 4px solid var(--pink); background: var(--surface); box-shadow: var(--shadow); }
+    .hero-summary > span, .hero-summary > small { display: block; color: var(--ink-soft); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+    .hero-summary h2 { margin: 12px 0 2px; color: var(--ink-deep); font-size: clamp(30px,4vw,52px); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+    .hero-summary h2 span { color: var(--pink); }
+    .hero-rule { height: 1px; margin: 22px 0; background: var(--line); }
+    .hero-summary p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+    .hero-summary strong { color: var(--ink-deep); }
+
+    .settings-panel { display: none; margin: 0 clamp(22px,7vw,108px) 30px; padding: clamp(26px,4vw,42px); border: 1px solid var(--line); background: var(--surface); box-shadow: 0 14px 40px rgba(75,76,78,.07); }
+    .settings-panel.visible { display: block; }
+    .settings-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 28px; }
+    .settings-heading h2 { margin: 6px 0 0; color: var(--ink-deep); font-size: clamp(28px,3.5vw,44px); font-weight: 500; letter-spacing: -.035em; }
+    .text-button { padding: 8px 0; border: 0; background: transparent; color: var(--teal-dark); cursor: pointer; font-size: 13px; font-weight: 600; }
+    .settings-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; margin-top: 28px; }
+    .settings-grid label > span { display: block; margin-bottom: 8px; color: var(--ink-soft); font-size: 13px; font-weight: 600; }
+    .input-unit { display: flex; align-items: center; min-height: 50px; padding: 0 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+    .input-unit:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(8,170,189,.1); }
+    .input-unit input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink-deep); font-size: 17px; font-weight: 600; }
+    .input-unit b { flex: none; color: var(--ink-soft); font-size: 12px; font-weight: 500; }
+    .settings-result { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 24px; }
+    .settings-result div { padding: 16px; background: var(--teal-light); }
+    .settings-result div:last-child { background: var(--pink-light); }
+    .settings-result small, .settings-result strong { display: block; }
+    .settings-result small { color: var(--ink-soft); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .settings-result strong { margin-top: 6px; color: var(--ink-deep); font-size: 25px; font-weight: 500; }
+
+    .content-section { padding: clamp(76px,10vw,132px) clamp(22px,7vw,108px); border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: flex-start; gap: 18px; max-width: 900px; margin-bottom: clamp(40px,6vw,68px); }
+    .section-number { display: grid; flex: none; width: 48px; height: 48px; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal-dark); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .section-heading h2 { margin: 6px 0 0; color: var(--ink-deep); font-size: clamp(30px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .section-heading p { margin: 12px 0 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+    .intro-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(300px,.8fr); gap: clamp(28px,7vw,88px); align-items: start; }
+    .intro-copy { max-width: 760px; }
+    .intro-copy p { margin: 0 0 18px; color: var(--ink-soft); font-size: 20px; line-height: 1.6; }
+    .intro-copy strong { color: var(--ink-deep); }
+    .formal-note { padding: 23px; border-left: 4px solid var(--teal); background: var(--teal-light); color: var(--teal-dark); font-size: 14px; line-height: 1.5; }
+    .formal-note strong { display: block; margin-bottom: 6px; color: var(--teal-dark); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .value-points { display: grid; gap: 10px; }
+    .value-point { display: flex; gap: 13px; padding: 18px; border: 1px solid var(--line); background: var(--surface); }
+    .value-point i { display: grid; flex: none; width: 29px; height: 29px; place-items: center; border-radius: 50%; background: var(--pink-light); color: var(--pink-dark); font-style: normal; font-weight: 700; }
+    .value-point strong, .value-point small { display: block; }
+    .value-point strong { color: var(--ink-deep); font-size: 14px; }
+    .value-point small { margin-top: 3px; color: var(--ink-soft); font-size: 12px; line-height: 1.35; }
+
+    .cell-section { background: #f1f7f8; }
+    .cell-layout { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(300px,.75fr); gap: 20px; }
+    .role-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1px; padding: 1px; border: 1px solid var(--line); background: var(--line); }
+    .role-card { padding: 24px; background: var(--surface); }
+    .role-card:nth-child(2n) { background: #fbfcfc; }
+    .role-icon { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .role-card:nth-child(2n) .role-icon { background: var(--pink-light); color: var(--pink-dark); }
+    .role-card h3 { margin: 17px 0 7px; color: var(--ink-deep); font-size: 22px; font-weight: 500; letter-spacing: -.03em; }
+    .role-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .cell-aside { padding: 28px; border: 1px solid var(--line); background: var(--surface); }
+    .cell-aside > span { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .cell-aside h3 { margin: 8px 0 20px; color: var(--ink-deep); font-size: 28px; font-weight: 500; letter-spacing: -.04em; }
+    .cell-flow { display: grid; gap: 9px; }
+    .cell-flow div { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 14px; background: var(--paper); }
+    .cell-flow strong { color: var(--ink-deep); font-size: 14px; }
+    .cell-flow span { color: var(--ink-soft); font-size: 12px; text-align: right; }
+    .cell-note { margin: 19px 0 0; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+    .cell-note strong { color: var(--ink-deep); }
+
+    .method-section { background: var(--surface); }
+    .ceremony-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; }
+    .ceremony-card { min-height: 210px; padding: 22px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .ceremony-card:nth-child(2n) { border-top-color: var(--pink); }
+    .ceremony-card:last-child { border-top-color: var(--pink); background: var(--pink-light); }
+    .ceremony-card > span { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+    .ceremony-card:nth-child(2n) > span, .ceremony-card:last-child > span { color: var(--pink-dark); }
+    .ceremony-card h3 { margin: 18px 0 8px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .ceremony-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .monthly-cycle { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1px; margin-top: 20px; padding: 1px; background: var(--line); }
+    .cycle-step { padding: 19px; background: var(--surface); }
+    .cycle-step strong, .cycle-step small { display: block; }
+    .cycle-step strong { color: var(--ink-deep); font-size: 15px; }
+    .cycle-step small { margin-top: 6px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .cycle-step b { display: block; margin-bottom: 12px; color: var(--teal-dark); font-family: var(--mono); font-size: 10px; }
+    .cycle-step:nth-child(4) b { color: var(--pink-dark); }
+
+    .backlog-section { background: #f1f7f8; }
+    .backlog-flow { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; }
+    .backlog-step { position: relative; padding: 23px 19px; border: 1px solid var(--line); background: var(--surface); }
+    .backlog-step:not(:last-child)::after { position: absolute; top: 50%; right: -10px; z-index: 2; width: 18px; height: 18px; border-top: 1px solid var(--teal); border-right: 1px solid var(--teal); background: #f1f7f8; content: ""; transform: translateY(-50%) rotate(45deg); }
+    .backlog-step b { display: block; color: var(--teal-dark); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; }
+    .backlog-step h3 { margin: 13px 0 7px; color: var(--ink-deep); font-size: 19px; font-weight: 500; letter-spacing: -.03em; }
+    .backlog-step p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .change-rules { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin-top: 20px; }
+    .change-rule { padding: 22px; border-left: 4px solid var(--teal); background: var(--surface); }
+    .change-rule.improvement { border-left-color: var(--pink); background: var(--pink-light); }
+    .change-rule strong, .change-rule p { display: block; }
+    .change-rule strong { color: var(--ink-deep); font-size: 16px; }
+    .change-rule p { margin: 7px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+
+    .responsibility-section { background: var(--surface); }
+    .responsibility-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+    .responsibility-card { padding: 28px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .responsibility-card.serviu { border-top-color: var(--pink); }
+    .responsibility-card h3 { margin: 0 0 20px; color: var(--ink-deep); font-size: 27px; font-weight: 500; letter-spacing: -.04em; }
+    .responsibility-card ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .responsibility-card li { position: relative; padding-left: 23px; color: var(--ink-soft); font-size: 14px; line-height: 1.45; }
+    .responsibility-card li::before { position: absolute; left: 0; top: 2px; color: var(--teal); content: "✓"; font-weight: 700; }
+    .responsibility-card.serviu li::before { color: var(--pink); content: "→"; }
+    .sprint-zero { display: flex; align-items: center; gap: 17px; margin-top: 20px; padding: 21px; border: 1px solid rgba(8,170,189,.25); background: var(--teal-light); }
+    .sprint-zero b { display: grid; flex: none; width: 45px; height: 45px; place-items: center; border-radius: 50%; background: var(--teal); color: #fff; font-family: var(--mono); font-size: 10px; }
+    .sprint-zero strong, .sprint-zero small { display: block; }
+    .sprint-zero strong { color: var(--ink-deep); font-size: 15px; }
+    .sprint-zero small { margin-top: 4px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+
+    .commercial-section { background: var(--ink-deep); color: #fff; }
+    .commercial-section .section-number { border-color: rgba(255,255,255,.45); color: #fff; }
+    .commercial-section .section-kicker { color: #70e0ea; }
+    .commercial-section .section-heading h2 { color: #fff; }
+    .commercial-section .section-heading p { color: rgba(255,255,255,.65); }
+    .commercial-layout { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(300px,.85fr); gap: 28px; align-items: stretch; }
+    .commercial-table { overflow: hidden; border: 1px solid rgba(255,255,255,.16); }
+    .commercial-row { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .commercial-row:last-child { border-bottom: 0; }
+    .commercial-row > span, .commercial-row > strong { padding: 17px 20px; }
+    .commercial-row > span { color: rgba(255,255,255,.62); font-size: 14px; }
+    .commercial-row > strong { color: #fff; font-size: 18px; font-weight: 500; text-align: right; }
+    .commercial-row.total { background: var(--pink); }
+    .commercial-row.total > span, .commercial-row.total > strong { color: #fff; }
+    .commercial-note { margin: 16px 0 0; color: rgba(255,255,255,.58); font-size: 12px; line-height: 1.5; }
+    .scale-card { padding: 28px; background: rgba(255,255,255,.08); }
+    .scale-card > span { color: #70e0ea; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .scale-card h3 { margin: 9px 0 20px; color: #fff; font-size: 29px; font-weight: 500; letter-spacing: -.04em; }
+    .scale-card p { margin: 0; color: rgba(255,255,255,.68); font-size: 15px; line-height: 1.55; }
+    .scale-highlight { display: flex; align-items: center; gap: 12px; margin-top: 23px; padding-top: 19px; border-top: 1px solid rgba(255,255,255,.14); }
+    .scale-highlight i { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: var(--pink); color: #fff; font-style: normal; font-weight: 700; }
+    .scale-highlight strong { color: #fff; font-size: 14px; }
+
+    .closing-section { padding-top: 85px; padding-bottom: 85px; background: var(--pink-light); }
+    .closing-card { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: clamp(28px,5vw,54px); border: 1px solid rgba(255,10,92,.23); background: var(--surface); box-shadow: var(--shadow); }
+    .closing-card h2 { margin: 0 0 10px; color: var(--ink-deep); font-size: clamp(29px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .closing-card p { max-width: 660px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.5; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 32px clamp(22px,7vw,108px); background: #45474a; color: #fff; }
+    footer strong, footer span { display: block; }
+    footer strong { font-size: 13px; }
+    footer span, footer p { color: rgba(255,255,255,.55); font-size: 11px; }
+    footer span { margin-top: 5px; }
+    footer p { max-width: 430px; margin: 0; text-align: right; line-height: 1.5; }
+
+    @media (max-width: 1080px) {
+      .top-nav { display: none; }
+      .ceremony-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .ceremony-card:last-child { grid-column: span 3; }
+    }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-summary { max-width: 460px; }
+      .settings-grid, .intro-grid, .cell-layout, .commercial-layout { grid-template-columns: 1fr 1fr; }
+      .settings-grid label:last-child { grid-column: span 2; }
+      .intro-copy, .formal-note { grid-column: 1 / -1; }
+      .value-points { grid-column: 1 / -1; grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .cell-layout, .commercial-layout { grid-template-columns: 1fr; }
+      .backlog-flow { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .backlog-step:not(:last-child)::after { display: none; }
+    }
+    @media (max-width: 620px) {
+      .topbar { align-items: flex-start; gap: 14px; }
+      .brand small { display: none; }
+      .top-actions { flex-wrap: wrap; justify-content: flex-end; }
+      .button { min-height: 36px; padding: 0 11px; font-size: 11px; }
+      .hero { padding-top: 72px; }
+      .hero h1 { font-size: clamp(44px,13vw,67px); }
+      .hero::before, .hero::after { display: none; }
+      .settings-heading, .closing-card { align-items: flex-start; flex-direction: column; }
+      .settings-grid, .role-grid, .ceremony-grid, .monthly-cycle, .responsibility-grid, .change-rules, .backlog-flow, .value-points { grid-template-columns: 1fr; }
+      .settings-grid label:last-child, .value-points, .intro-copy, .formal-note { grid-column: auto; }
+      .ceremony-card:last-child { grid-column: auto; }
+      .section-heading { flex-direction: column; }
+      .backlog-step { min-height: 0; }
+      footer { align-items: flex-start; flex-direction: column; }
+      footer p { text-align: left; }
+    }
+    @media print {
+      :root { --paper: #fff; }
+      @page { margin: 10mm; size: A4 landscape; }
+      html, body { width: auto; min-width: 0; background: #fff; }
+      body { font-size: 10pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .site-shell { min-height: 0; overflow: visible; }
+      .topbar, .settings-panel, .closing-card .button, footer { display: none !important; }
+      .hero, .content-section { width: 100%; min-height: 190mm; break-after: page; page-break-after: always; }
+      .hero {
+        display: grid !important;
+        grid-template-columns: minmax(0,1.32fr) minmax(72mm,.68fr) !important;
+        gap: 12mm !important;
+        align-items: center !important;
+        height: 190mm;
+        padding: 14mm;
+      }
+      .hero h1 { margin: 5mm 0 6mm; font-size: 16mm; line-height: .98; }
+      .hero-copy > p { font-size: 4.4mm; line-height: 1.4; }
+      .hero-tags { gap: 2mm; margin-top: 7mm; }
+      .hero-tags span { padding: 2.2mm 3mm; font-size: 8pt; }
+      .hero-summary { max-width: none; padding: 7mm; box-shadow: 0 5mm 14mm rgba(75,76,78,.12); }
+      .hero-summary h2 { margin: 3mm 0 1mm; font-size: 11mm; }
+      .hero-summary p { font-size: 8.5pt; }
+      .content-section { padding: 10mm 12mm; break-before: page; page-break-before: always; }
+      .section-heading { flex-direction: row !important; gap: 4mm; max-width: none; margin-bottom: 7mm; }
+      .section-number { width: 11mm; height: 11mm; font-size: 8pt; }
+      .section-heading h2 { margin-top: 1.5mm; font-size: 8.2mm; line-height: 1.04; }
+      .section-heading p { margin-top: 2.5mm; font-size: 9pt; line-height: 1.35; }
+
+      .intro-grid { grid-template-columns: minmax(0,1.2fr) minmax(75mm,.8fr) !important; gap: 9mm; }
+      .intro-copy, .formal-note, .value-points { grid-column: auto !important; }
+      .intro-copy p { margin-bottom: 3mm; font-size: 10.5pt; line-height: 1.45; }
+      .formal-note { padding: 4mm; font-size: 8pt; }
+      .value-points { display: grid; grid-template-columns: 1fr !important; gap: 2.5mm; }
+      .value-point { padding: 3.5mm; }
+
+      .cell-layout { grid-template-columns: minmax(0,1.25fr) minmax(78mm,.75fr) !important; gap: 4mm; }
+      .role-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+      .role-card { padding: 4.5mm; }
+      .role-card h3 { margin: 3mm 0 1.5mm; font-size: 15pt; }
+      .role-card p { font-size: 8pt; }
+      .cell-aside { padding: 5mm; }
+      .cell-aside h3 { margin: 2mm 0 4mm; font-size: 19pt; }
+      .cell-flow div { padding: 2.5mm 3mm; }
+      .cell-note { margin-top: 3mm; padding-top: 3mm; font-size: 7.5pt; }
+
+      .ceremony-grid { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2.5mm; }
+      .ceremony-card, .ceremony-card:last-child { grid-column: auto !important; min-height: 42mm; padding: 4mm; }
+      .ceremony-card h3 { margin: 3mm 0 1.5mm; font-size: 13pt; }
+      .ceremony-card p { font-size: 7.5pt; }
+      .monthly-cycle { grid-template-columns: repeat(4,minmax(0,1fr)) !important; margin-top: 4mm; }
+      .cycle-step { padding: 3.5mm; }
+      .cycle-step b { margin-bottom: 2mm; }
+      .cycle-step small { font-size: 7pt; }
+
+      .backlog-flow { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2.5mm; }
+      .backlog-step { min-height: 0; padding: 4mm 3.5mm; }
+      .backlog-step:not(:last-child)::after { display: block; }
+      .backlog-step h3 { margin: 2.5mm 0 1.5mm; font-size: 13pt; }
+      .backlog-step p { font-size: 7.5pt; }
+      .change-rules { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 3mm; margin-top: 4mm; }
+      .change-rule { padding: 4mm; }
+
+      .responsibility-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; gap: 4mm; }
+      .responsibility-card { padding: 5mm; }
+      .responsibility-card h3 { margin-bottom: 3mm; font-size: 18pt; }
+      .responsibility-card ul { gap: 2mm; }
+      .responsibility-card li { font-size: 8.5pt; }
+      .sprint-zero { margin-top: 4mm; padding: 4mm; }
+
+      .commercial-layout { grid-template-columns: minmax(0,1.15fr) minmax(78mm,.85fr) !important; gap: 5mm; }
+      .commercial-row > span, .commercial-row > strong { padding: 3mm 4mm; }
+      .commercial-row > span { font-size: 8.5pt; }
+      .commercial-row > strong { font-size: 11pt; }
+      .scale-card { padding: 5mm; }
+      .scale-card h3 { margin: 2mm 0 4mm; font-size: 20pt; }
+      .scale-card p { font-size: 9pt; }
+      .closing-section { display: grid; align-items: center; break-after: auto; page-break-after: auto; }
+      .closing-card { flex-direction: row !important; padding: 10mm; box-shadow: none; }
+
+      .role-card, .cell-aside, .ceremony-card, .cycle-step, .backlog-step,
+      .change-rule, .responsibility-card, .sprint-zero, .commercial-table,
+      .scale-card, .closing-card { break-inside: avoid; page-break-inside: avoid; }
+      p, li { orphans: 3; widows: 3; }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Símbolo AtomDev">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#5f6062" stroke-width="1.8"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(0 24 24)"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(52 24 24)"/>
+            <ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(-52 24 24)"/>
+            <circle cx="24" cy="24" r="5.4" fill="#08aabd"/>
+            <circle cx="29.8" cy="8.8" r="2.6" fill="#08aabd"/>
+            <circle cx="10.5" cy="22.5" r="2.6" fill="#ff0a5c"/>
+            <circle cx="35.5" cy="35.5" r="2.6" fill="#ff0a5c"/>
+          </svg>
+        </span>
+        <span><strong>AtomDev</strong><small>Propuesta de trabajo</small></span>
+      </a>
+      <div class="top-actions">
+        <nav class="top-nav" aria-label="Secciones de la propuesta">
+          <a href="#modelo">Modelo</a><a href="#metodologia">Metodología</a><a href="#comercial">Comercial</a>
+        </nav>
+        <button class="button button-ghost" id="settings-toggle">Configurar propuesta</button>
+        <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <span class="eyebrow">PROPUESTA DE TRABAJO · ATOMDEV + SERVIU METROPOLITANO</span>
+        <h1>Una forma de trabajar ágil, transparente y preparada para crecer.</h1>
+        <p>Modelo de colaboración para desarrollar y evolucionar soluciones digitales mediante células de trabajo ágiles, sprints mensuales y priorización continua de requerimientos.</p>
+        <div class="hero-tags" aria-label="Características del servicio"><span>Equipo ágil especializado</span><span>Sprints de un mes</span><span>Capacidad escalable</span><span>Gestión por backlog</span></div>
+      </div>
+      <aside class="hero-summary" aria-label="Resumen comercial de la propuesta">
+        <span>Valor de referencia por célula</span>
+        <h2><span id="hero-cell-value">176</span> UF</h2>
+        <small>por sprint de <span id="hero-sprint-weeks">4</span> semanas</small>
+        <div class="hero-rule"></div>
+        <p><strong id="hero-rate">1</strong> UF / hora · hasta <strong id="hero-weekly-hours">44</strong> horas semanales.<br>Una célula integra liderazgo técnico, Scrum Master, QA y desarrollo.</p>
+      </aside>
+    </section>
+
+    <section class="settings-panel" id="settings-panel" aria-labelledby="settings-title">
+      <div class="settings-heading"><div><span class="section-kicker">CONFIGURACIÓN DE LA PROPUESTA</span><h2 id="settings-title">Ajusta los valores comerciales.</h2></div><button class="text-button" id="reset-button">Restablecer valores</button></div>
+      <div class="settings-grid">
+        <label><span>Valor hora</span><div class="input-unit"><input id="hourly-rate" type="number" min="0" step="0.1" value="1"><b>UF / hora</b></div></label>
+        <label><span>Horas semanales</span><div class="input-unit"><input id="weekly-hours" type="number" min="1" max="168" step="1" value="44"><b>horas</b></div></label>
+        <label><span>Semanas por sprint</span><div class="input-unit"><input id="sprint-weeks" type="number" min="1" max="8" step="1" value="4"><b>semanas</b></div></label>
+        <label><span>Número de células</span><div class="input-unit"><input id="cell-count" type="number" min="1" max="20" step="1" value="1"><b>células</b></div></label>
+      </div>
+      <div class="settings-result"><div><small>Valor por célula / sprint</small><strong><span id="settings-cell-value">176</span> UF</strong></div><div><small>Valor total / sprint</small><strong><span id="settings-total-value">176</span> UF</strong></div></div>
+    </section>
+
+    <section class="content-section" id="introduccion">
+      <div class="section-heading"><span class="section-number">01</span><div><span class="section-kicker">INTRODUCCIÓN</span><h2>Una alianza de trabajo para entregar valor de manera continua.</h2><p>AtomDev propone un modelo de colaboración diseñado para acompañar las prioridades digitales de Serviu Metropolitano con capacidad técnica, foco en resultados y comunicación permanente.</p></div></div>
+      <div class="intro-grid">
+        <div class="intro-copy"><p>La propuesta considera la conformación de una <strong>célula de trabajo ágil</strong> compuesta por perfiles complementarios, que trabajará junto a los equipos y referentes de Serviu Metropolitano para transformar requerimientos en soluciones funcionales, revisables y trazables.</p><p>El modelo permite comenzar con un proyecto y escalar progresivamente a nuevas iniciativas mediante la incorporación de células adicionales, manteniendo la misma forma de trabajo, los mismos estándares y una visión común del backlog.</p><div class="formal-note"><strong>Principio de colaboración</strong>La capacidad del equipo se organiza alrededor de objetivos priorizados y entregables revisables. De esta manera, cada sprint permite observar avances, tomar decisiones y ajustar el rumbo con información real.</div></div>
+        <div class="value-points"><div class="value-point"><i>01</i><div><strong>Capacidad especializada</strong><small>Un equipo completo para sostener el ciclo técnico y funcional.</small></div></div><div class="value-point"><i>02</i><div><strong>Transparencia</strong><small>Backlog visible, acuerdos claros y revisión frecuente.</small></div></div><div class="value-point"><i>03</i><div><strong>Escalabilidad</strong><small>Más proyectos se abordan con nuevas células de trabajo.</small></div></div></div>
+      </div>
+    </section>
+
+    <section class="content-section cell-section" id="modelo">
+      <div class="section-heading"><span class="section-number">02</span><div><span class="section-kicker">MODELO DE SERVICIO</span><h2>Cada célula reúne las capacidades necesarias para avanzar.</h2><p>Una célula funciona como una unidad de trabajo autónoma, coordinada y orientada a entregar soluciones dentro de un sprint mensual.</p></div></div>
+      <div class="cell-layout">
+        <div class="role-grid">
+          <article class="role-card"><span class="role-icon">LT</span><h3>Líder técnico</h3><p>Define criterios técnicos, guía las decisiones de arquitectura y acompaña la calidad de la solución.</p></article>
+          <article class="role-card"><span class="role-icon">SM</span><h3>Scrum Master</h3><p>Facilita la metodología, remueve impedimentos y cuida el flujo de trabajo del equipo.</p></article>
+          <article class="role-card"><span class="role-icon">QA</span><h3>QA</h3><p>Diseña y ejecuta pruebas para asegurar que cada solución cumpla los criterios acordados.</p></article>
+          <article class="role-card"><span class="role-icon">DEV</span><h3>Desarrollador</h3><p>Construye, integra y mantiene las funcionalidades priorizadas para el producto o proyecto.</p></article>
+        </div>
+        <aside class="cell-aside"><span>UNA UNIDAD DE TRABAJO</span><h3>Célula ágil</h3><div class="cell-flow"><div><strong>1 proyecto</strong><span>por célula de referencia</span></div><div><strong id="cell-aside-hours">44 horas / semana</strong><span>capacidad máxima</span></div><div><strong id="cell-aside-sprint">4 semanas</strong><span>duración del sprint</span></div></div><p class="cell-note"><strong>Escalamiento:</strong> cuando Serviu Metropolitano requiera abordar más de un proyecto en paralelo, se incorpora una nueva célula y el valor total aumenta proporcionalmente a la capacidad contratada.</p></aside>
+      </div>
+    </section>
+
+    <section class="content-section method-section" id="metodologia">
+      <div class="section-heading"><span class="section-number">03</span><div><span class="section-kicker">METODOLOGÍA ÁGIL</span><h2>La metodología se vive en el trabajo cotidiano.</h2><p>La agilidad se traduce en ciclos cortos, conversaciones frecuentes, decisiones visibles y validación temprana del resultado.</p></div></div>
+      <div class="ceremony-grid">
+        <article class="ceremony-card"><span>CONTINUA</span><h3>Daily</h3><p>Sincronización breve del equipo para revisar avances, próximos pasos e impedimentos.</p></article>
+        <article class="ceremony-card"><span>INICIO</span><h3>Sprint Planning</h3><p>Selección de los requerimientos que se abordarán y acuerdo del objetivo del sprint.</p></article>
+        <article class="ceremony-card"><span>DURANTE</span><h3>Refinamiento</h3><p>Conversación y detalle de los ítems del backlog para preparar los siguientes sprints.</p></article>
+        <article class="ceremony-card"><span>CIERRE</span><h3>Sprint Review</h3><p>Demostración de los avances y validación con Serviu Metropolitano. Puede realizarse más de una revisión.</p></article>
+        <article class="ceremony-card"><span>MEJORA</span><h3>Retrospectiva</h3><p>Identificación de aprendizajes y acuerdos para mejorar continuamente la forma de trabajo.</p></article>
+      </div>
+      <div class="monthly-cycle"><div class="cycle-step"><b>SEMANA 01</b><strong>Planificar</strong><small>Definir objetivo, revisar prioridades y comprometer el alcance.</small></div><div class="cycle-step"><b>SEMANA 02</b><strong>Construir</strong><small>Desarrollar, probar y conversar sobre los avances del sprint.</small></div><div class="cycle-step"><b>SEMANA 03</b><strong>Refinar</strong><small>Preparar requerimientos futuros y anticipar decisiones necesarias.</small></div><div class="cycle-step"><b>SEMANA 04</b><strong>Revisar y mejorar</strong><small>Mostrar resultados, recoger observaciones y acordar próximos pasos.</small></div></div>
+    </section>
+
+    <section class="content-section backlog-section" id="backlog">
+      <div class="section-heading"><span class="section-number">04</span><div><span class="section-kicker">BACKLOG Y CONTROL DE CAMBIOS</span><h2>Cada requerimiento tiene un lugar y una decisión.</h2><p>La trazabilidad permite diferenciar la solución comprometida de una nueva necesidad, evitando que el alcance se desplace sin visibilidad.</p></div></div>
+      <div class="backlog-flow"><div class="backlog-step"><b>01 · NECESIDAD</b><h3>Se plantea</h3><p>La contraparte presenta una necesidad de negocio o técnica.</p></div><div class="backlog-step"><b>02 · TICKET</b><h3>Se documenta</h3><p>Se registra el requerimiento, su contexto y los criterios de aceptación.</p></div><div class="backlog-step"><b>03 · BACKLOG</b><h3>Se prioriza</h3><p>El requerimiento queda visible y se ordena junto con las demás prioridades.</p></div><div class="backlog-step"><b>04 · SPRINT</b><h3>Se construye</h3><p>El equipo lo aborda dentro del objetivo y capacidad del sprint.</p></div><div class="backlog-step"><b>05 · REVIEW</b><h3>Se valida</h3><p>La solución se revisa con Serviu Metropolitano antes de cerrarse.</p></div></div>
+      <div class="change-rules"><div class="change-rule"><strong>Cuando cumple el ticket</strong><p>Si la solución responde a lo descrito y cumple los criterios acordados, se considera el requerimiento resuelto.</p></div><div class="change-rule improvement"><strong>Cuando aparece algo nuevo</strong><p>Si la observación modifica o amplía el requerimiento original, se registra como mejora, vuelve al backlog y se prioriza para un siguiente sprint.</p></div></div>
+    </section>
+
+    <section class="content-section responsibility-section" id="roles">
+      <div class="section-heading"><span class="section-number">05</span><div><span class="section-kicker">GOBERNANZA DE LA COLABORACIÓN</span><h2>Responsabilidades claras para que el modelo funcione.</h2><p>La agilidad necesita participación de ambas partes, acuerdos oportunos y una única visión de las prioridades.</p></div></div>
+      <div class="responsibility-grid"><article class="responsibility-card"><h3>AtomDev</h3><ul><li>Proveer y coordinar la célula de trabajo.</li><li>Facilitar las ceremonias y mantener el flujo ágil.</li><li>Estimar, construir, probar y demostrar los avances.</li><li>Informar riesgos, impedimentos y dependencias.</li><li>Mantener actualizado el estado del backlog y del sprint.</li></ul></article><article class="responsibility-card serviu"><h3>Serviu Metropolitano</h3><ul><li>Definir prioridades y validar el objetivo del sprint.</li><li>Entregar información, accesos y decisiones necesarias.</li><li>Participar en refinamientos y revisiones de sprint.</li><li>Validar los criterios de aceptación y observaciones.</li><li>Acordar las mejoras que pasarán al backlog.</li></ul></article></div>
+      <div class="sprint-zero"><b>0</b><div><strong>Puesta en marcha sugerida: Sprint 0 de alineación</strong><small>Antes del primer sprint mensual, se recomienda acordar objetivos, roles, canales, criterios de aceptación, accesos y prioridades iniciales.</small></div></div>
+    </section>
+
+    <section class="content-section commercial-section" id="comercial">
+      <div class="section-heading"><span class="section-number">06</span><div><span class="section-kicker">MODELO COMERCIAL</span><h2>Una estructura simple, transparente y escalable.</h2><p>El valor corresponde a la capacidad de una célula ágil completa durante un sprint mensual.</p></div></div>
+      <div class="commercial-layout"><div><div class="commercial-table"><div class="commercial-row"><span>Valor hora</span><strong><span id="commercial-rate">1</span> UF</strong></div><div class="commercial-row"><span>Capacidad semanal</span><strong><span id="commercial-hours">44</span> horas</strong></div><div class="commercial-row"><span>Duración del sprint</span><strong><span id="commercial-weeks">4</span> semanas</strong></div><div class="commercial-row"><span>Valor de una célula</span><strong><span id="commercial-cell-value">176</span> UF</strong></div><div class="commercial-row total"><span>Valor total contratado</span><strong><span id="commercial-total-value">176</span> UF / sprint</strong></div></div><p class="commercial-note">El valor corresponde a la capacidad del equipo durante el sprint. La ejecución se organiza según el backlog priorizado y no según una cantidad fija de tickets.</p></div><aside class="scale-card"><span>ESCALABILIDAD DEL MODELO</span><h3>Más proyectos, más células.</h3><p>Una célula puede atender un proyecto de referencia. Para trabajar proyectos adicionales en paralelo, se incorpora una nueva célula con la misma composición y capacidad.</p><div class="scale-highlight"><i>+</i><strong id="scale-value">176 UF por cada célula adicional</strong></div></aside></div>
+    </section>
+
+    <section class="content-section closing-section" id="cierre">
+      <div class="closing-card"><div><span class="section-kicker">CIERRE DE LA PROPUESTA</span><h2>Una forma de avanzar con foco, claridad y confianza.</h2><p>AtomDev pone a disposición de Serviu Metropolitano un equipo ágil completo, una metodología de trabajo visible y una capacidad que puede crecer junto con sus prioridades.</p></div><button class="button button-pink" id="settings-from-close">Configurar valores</button></div>
+    </section>
+
+    <footer><div><strong>AtomDev · Propuesta de trabajo para Serviu Metropolitano</strong><span>Modelo de colaboración ágil · Valores expresados en UF</span></div><p>La presente propuesta busca establecer una forma de trabajo clara antes de iniciar la ejecución.</p></footer>
+  </main>
+
+  <script>
+    (() => {
+      const defaults = { hourlyRate: 1, weeklyHours: 44, sprintWeeks: 4, cellCount: 1 };
+      const saved = document.documentElement.dataset;
+      const state = {
+        hourlyRate: Number(saved.hourlyRate ?? defaults.hourlyRate),
+        weeklyHours: Number(saved.weeklyHours ?? defaults.weeklyHours),
+        sprintWeeks: Number(saved.sprintWeeks ?? defaults.sprintWeeks),
+        cellCount: Number(saved.cellCount ?? defaults.cellCount)
+      };
+      const $ = (id) => document.getElementById(id);
+      const formatUF = (value) => new Intl.NumberFormat("es-CL", { minimumFractionDigits: Number.isInteger(value) ? 0 : 1, maximumFractionDigits: 2 }).format(value);
+      const clamp = (value, min, max) => Math.min(Math.max(Number.isFinite(value) ? value : min, min), max);
+
+      function render() {
+        Object.assign(document.documentElement.dataset, {
+          hourlyRate: String(state.hourlyRate), weeklyHours: String(state.weeklyHours),
+          sprintWeeks: String(state.sprintWeeks), cellCount: String(state.cellCount)
+        });
+        $("hourly-rate").value = state.hourlyRate;
+        $("weekly-hours").value = state.weeklyHours;
+        $("sprint-weeks").value = state.sprintWeeks;
+        $("cell-count").value = state.cellCount;
+        const cellValue = state.hourlyRate * state.weeklyHours * state.sprintWeeks;
+        const totalValue = cellValue * state.cellCount;
+        $("hero-cell-value").textContent = formatUF(cellValue);
+        $("hero-sprint-weeks").textContent = state.sprintWeeks;
+        $("hero-rate").textContent = formatUF(state.hourlyRate);
+        $("hero-weekly-hours").textContent = formatUF(state.weeklyHours);
+        $("settings-cell-value").textContent = formatUF(cellValue);
+        $("settings-total-value").textContent = formatUF(totalValue);
+        $("cell-aside-hours").textContent = `${formatUF(state.weeklyHours)} horas / semana`;
+        $("cell-aside-sprint").textContent = `${state.sprintWeeks} semanas`;
+        $("commercial-rate").textContent = formatUF(state.hourlyRate);
+        $("commercial-hours").textContent = formatUF(state.weeklyHours);
+        $("commercial-weeks").textContent = state.sprintWeeks;
+        $("commercial-cell-value").textContent = formatUF(cellValue);
+        $("commercial-total-value").textContent = `${formatUF(totalValue)} UF / sprint`;
+        $("scale-value").textContent = `${formatUF(cellValue)} UF por cada célula adicional`;
+      }
+
+      function toggleSettings(force) {
+        const panel = $("settings-panel");
+        const visible = typeof force === "boolean" ? force : !panel.classList.contains("visible");
+        panel.classList.toggle("visible", visible);
+        $("settings-toggle").textContent = visible ? "Ocultar configuración" : "Configurar propuesta";
+        if (visible) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function downloadWebProposal() {
+        const copy = document.documentElement.cloneNode(true);
+        document.querySelectorAll("input").forEach((input, index) => {
+          const copiedInput = copy.querySelectorAll("input")[index];
+          copiedInput.setAttribute("value", input.value);
+          if (input.checked) copiedInput.setAttribute("checked", "");
+          else copiedInput.removeAttribute("checked");
+        });
+        const html = `<!doctype html>\n${copy.outerHTML}`;
+        const blob = new Blob([html], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "propuesta-trabajo-atomdev-serviu.html";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      $("settings-toggle").addEventListener("click", () => toggleSettings());
+      $("settings-from-close").addEventListener("click", () => toggleSettings(true));
+      $("reset-button").addEventListener("click", () => { Object.assign(state, defaults); render(); });
+      [["hourly-rate", "hourlyRate", 0, 999], ["weekly-hours", "weeklyHours", 1, 168], ["sprint-weeks", "sprintWeeks", 1, 8], ["cell-count", "cellCount", 1, 20]].forEach(([id, key, min, max]) => $(id).addEventListener("input", (event) => { state[key] = clamp(event.target.valueAsNumber, min, max); render(); }));
+      $("download-html-button").addEventListener("click", downloadWebProposal);
+      $("print-button").addEventListener("click", () => window.print());
+      render();
+    })();
+  </script>
+</body>
+</html>
