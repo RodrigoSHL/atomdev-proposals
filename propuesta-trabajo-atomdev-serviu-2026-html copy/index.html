@@ -562,10 +562,10 @@
     <section class="settings-panel" id="settings-panel" aria-labelledby="settings-title">
       <div class="settings-heading"><div><span class="section-kicker">CONFIGURACIÓN DE LA PROPUESTA</span><h2 id="settings-title">Ajusta los valores comerciales.</h2></div><button class="text-button" id="reset-button">Restablecer valores</button></div>
       <div class="settings-grid">
-        <label><span>Valor hora</span><div class="input-unit"><input id="hourly-rate" type="number" min="0" step="0.1" value="1"><b>UF / hora</b></div></label>
-        <label><span>Horas semanales</span><div class="input-unit"><input id="weekly-hours" type="number" min="1" max="168" step="1" value="44"><b>horas</b></div></label>
-        <label><span>Semanas por sprint</span><div class="input-unit"><input id="sprint-weeks" type="number" min="1" max="8" step="1" value="4"><b>semanas</b></div></label>
-        <label><span>Número de células</span><div class="input-unit"><input id="cell-count" type="number" min="1" max="20" step="1" value="1"><b>células</b></div></label>
+        <label><span>Valor hora</span><div class="input-unit"><input id="hourly-rate" type="number" min="0" step="any" value="1" placeholder="Ej: 1.0"><b>UF / hora</b></div></label>
+        <label><span>Horas semanales</span><div class="input-unit"><input id="weekly-hours" type="number" min="1" max="168" step="any" value="44" placeholder="Ej: 44"><b>horas</b></div></label>
+        <label><span>Semanas por sprint</span><div class="input-unit"><input id="sprint-weeks" type="number" min="1" max="8" step="any" value="4" placeholder="Ej: 4"><b>semanas</b></div></label>
+        <label><span>Número de células</span><div class="input-unit"><input id="cell-count" type="number" min="1" max="20" step="1" value="1" placeholder="Ej: 1"><b>células</b></div></label>
       </div>
       <div class="settings-result"><div><small>Valor por célula / sprint</small><strong><span id="settings-cell-value">176</span> UF</strong></div><div><small>Valor total / sprint</small><strong><span id="settings-total-value">176</span> UF</strong></div></div>
     </section>
@@ -935,17 +935,17 @@
       };
       const $ = (id) => document.getElementById(id);
       const formatUF = (value) => new Intl.NumberFormat("es-CL", { minimumFractionDigits: Number.isInteger(value) ? 0 : 1, maximumFractionDigits: 2 }).format(value);
-      const clamp = (value, min, max) => Math.min(Math.max(Number.isFinite(value) ? value : min, min), max);
 
       function render() {
         Object.assign(document.documentElement.dataset, {
           hourlyRate: String(state.hourlyRate), weeklyHours: String(state.weeklyHours),
           sprintWeeks: String(state.sprintWeeks), cellCount: String(state.cellCount)
         });
-        $("hourly-rate").value = state.hourlyRate;
-        $("weekly-hours").value = state.weeklyHours;
-        $("sprint-weeks").value = state.sprintWeeks;
-        $("cell-count").value = state.cellCount;
+        if (document.activeElement !== $("hourly-rate")) $("hourly-rate").value = state.hourlyRate;
+        if (document.activeElement !== $("weekly-hours")) $("weekly-hours").value = state.weeklyHours;
+        if (document.activeElement !== $("sprint-weeks")) $("sprint-weeks").value = state.sprintWeeks;
+        if (document.activeElement !== $("cell-count")) $("cell-count").value = state.cellCount;
+
         const cellValue = state.hourlyRate * state.weeklyHours * state.sprintWeeks;
         const totalValue = cellValue * state.cellCount;
         $("hero-cell-value").textContent = formatUF(cellValue);
@@ -964,13 +964,20 @@
         $("scale-value").textContent = `${formatUF(cellValue)} UF por cada célula adicional`;
       }
 
-      function toggleSettings(force) {
+      function toggleSettings(force, focusId) {
         const panel = $("settings-panel");
         const visible = typeof force === "boolean" ? force : !panel.classList.contains("visible");
         panel.classList.toggle("visible", visible);
         $("settings-toggle").textContent = visible ? "Ocultar configuración" : "Configurar propuesta";
-        if (visible) panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (visible) {
+          panel.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (focusId && $(focusId)) {
+            setTimeout(() => $(focusId).focus(), 200);
+          }
+        }
       }
+
+      window.toggleSettings = toggleSettings;
 
       function downloadWebProposal() {
         const copy = document.documentElement.cloneNode(true);
@@ -993,9 +1000,29 @@
       }
 
       $("settings-toggle").addEventListener("click", () => toggleSettings());
-      $("settings-from-close").addEventListener("click", () => toggleSettings(true));
+      $("settings-from-close").addEventListener("click", () => toggleSettings(true, "hourly-rate"));
       $("reset-button").addEventListener("click", () => { Object.assign(state, defaults); render(); });
-      [["hourly-rate", "hourlyRate", 0, 999], ["weekly-hours", "weeklyHours", 1, 168], ["sprint-weeks", "sprintWeeks", 1, 8], ["cell-count", "cellCount", 1, 20]].forEach(([id, key, min, max]) => $(id).addEventListener("input", (event) => { state[key] = clamp(event.target.valueAsNumber, min, max); render(); }));
+
+      const inputsConfig = [
+        ["hourly-rate", "hourlyRate", 0],
+        ["weekly-hours", "weeklyHours", 0],
+        ["sprint-weeks", "sprintWeeks", 0],
+        ["cell-count", "cellCount", 1]
+      ];
+
+      inputsConfig.forEach(([id, key, min]) => {
+        $(id).addEventListener("input", (event) => {
+          const rawVal = event.target.value;
+          const num = parseFloat(rawVal);
+          if (!isNaN(num) && num >= min) {
+            state[key] = num;
+          } else if (rawVal === "") {
+            state[key] = 0;
+          }
+          render();
+        });
+      });
+
       $("download-html-button").addEventListener("click", downloadWebProposal);
       $("print-button").addEventListener("click", () => window.print());
       render();
