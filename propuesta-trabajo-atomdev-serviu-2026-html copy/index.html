@@ -257,6 +257,29 @@
     .kpi-note { margin-top: 20px; padding: 23px; border-left: 4px solid var(--teal); background: var(--teal-light); color: var(--teal-dark); font-size: 14px; line-height: 1.5; }
     .kpi-note strong { display: block; margin-bottom: 6px; color: var(--teal-dark); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 
+    .entregables-section { background: #f8fafb; }
+    .hitos-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0; border: 1px solid var(--line); background: var(--line); }
+    .hito-card { display: flex; flex-direction: column; padding: 28px; background: var(--surface); }
+    .hito-card:nth-child(2) { background: #fbfcfc; }
+    .hito-num { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .hito-num-circle { display: grid; width: 34px; height: 34px; flex: none; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .hito-card:nth-child(2) .hito-num-circle { background: var(--pink-light); color: var(--pink-dark); }
+    .hito-num-label { color: var(--ink-soft); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+    .hito-card h3 { margin: 0 0 6px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .hito-plazo { margin: 0 0 16px; color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .hito-card:nth-child(2) .hito-plazo { color: var(--pink-dark); }
+    .hito-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; flex: 1; }
+    .hito-list li { position: relative; padding-left: 18px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .hito-list li::before { position: absolute; left: 0; top: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); content: ""; }
+    .hito-card:nth-child(2) .hito-list li::before { background: var(--pink); }
+    .entregables-tecnicos { margin-top: 20px; padding: 24px; border: 1px solid var(--line); background: var(--surface); }
+    .entregables-tecnicos-label { color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .08em; margin-bottom: 16px; text-transform: uppercase; }
+    .entregables-tecnicos-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; }
+    .entregable-tec { padding: 16px; border-left: 3px solid var(--teal); background: var(--teal-light); }
+    .entregable-tec:nth-child(2n) { border-left-color: var(--pink); background: var(--pink-light); }
+    .entregable-tec strong { display: block; margin-bottom: 4px; color: var(--ink-deep); font-size: 13px; font-weight: 700; }
+    .entregable-tec span { color: var(--ink-soft); font-size: 12px; line-height: 1.4; display: block; }
+
     .responsibility-section { background: var(--surface); }
     .responsibility-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
     .responsibility-card { padding: 28px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
@@ -271,6 +294,54 @@
     .sprint-zero strong, .sprint-zero small { display: block; }
     .sprint-zero strong { color: var(--ink-deep); font-size: 15px; }
     .sprint-zero small { margin-top: 4px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .cambio-section { background: #f1f7f8; }
+    .cambio-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+    .cambio-card { padding: 26px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .cambio-card:nth-child(2n) { border-top-color: var(--pink); }
+    .cambio-card:nth-child(3) { border-top-color: var(--teal); }
+    .cambio-icon { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .cambio-card:nth-child(2n) .cambio-icon { background: var(--pink-light); color: var(--pink-dark); }
+    .cambio-card h3 { margin: 16px 0 10px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .cambio-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .cambio-card li { position: relative; padding-left: 18px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .cambio-card li::before { position: absolute; left: 0; top: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); content: ""; }
+    .cambio-card:nth-child(2n) li::before { background: var(--pink); }
+    .cambio-compromiso { margin-top: 20px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .cambio-stat { padding: 20px 24px; background: var(--surface); }
+    .cambio-stat-num { display: block; color: var(--teal-dark); font-family: var(--mono); font-size: 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+    .cambio-stat:nth-child(2n) .cambio-stat-num { color: var(--pink-dark); }
+    .cambio-stat-label { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+
+    /* Herramientas Colaborativas (B6) */
+    .herramientas-block { margin-top: 24px; padding: 26px; border: 1px solid var(--line); background: var(--surface); }
+    .herramientas-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .herramientas-title h3 { margin: 0; color: var(--ink-deep); font-size: 18px; font-weight: 600; }
+    .herramientas-badge { padding: 4px 10px; border-radius: 4px; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; }
+    .herramientas-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; }
+    .herramienta-card { padding: 18px; border: 1px solid var(--line); border-top: 3px solid var(--teal); background: #fafcfc; }
+    .herramienta-card:nth-child(2n) { border-top-color: var(--pink); }
+    .herramienta-card strong { display: block; color: var(--ink-deep); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .herramienta-card small { display: block; color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; }
+    .herramienta-card p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+
+    /* Seguridad, Confidencialidad y PI (B12) */
+    .seguridad-section { background: var(--surface); }
+    .seguridad-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+    .seguridad-card { padding: 26px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: #fcfefe; }
+    .seguridad-card:nth-child(2) { border-top-color: var(--pink); }
+    .seguridad-card:nth-child(3) { border-top-color: var(--teal); }
+    .seguridad-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 6px; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 12px; font-weight: 700; margin-bottom: 14px; }
+    .seguridad-card:nth-child(2) .seguridad-card-icon { background: var(--pink-light); color: var(--pink-dark); }
+    .seguridad-card h3 { margin: 0 0 10px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .seguridad-card p { color: var(--ink-soft); font-size: 13px; line-height: 1.45; margin: 0 0 14px; }
+    .seguridad-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .seguridad-card li { position: relative; padding-left: 18px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .seguridad-card li::before { position: absolute; left: 0; top: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); content: ""; }
+    .seguridad-card:nth-child(2) li::before { background: var(--pink); }
+    .garantia-box { margin-top: 20px; padding: 22px 26px; border: 1px solid rgba(8,170,189,.3); border-left: 4px solid var(--teal); background: var(--teal-light); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .garantia-info strong { display: block; color: var(--ink-deep); font-size: 16px; margin-bottom: 4px; }
+    .garantia-info p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .garantia-badge { flex: none; padding: 10px 18px; border-radius: 6px; background: var(--teal); color: #fff; font-family: var(--mono); font-size: 14px; font-weight: 700; letter-spacing: .02em; }
 
     .commercial-section { background: var(--ink-deep); color: #fff; }
     .commercial-section .section-number { border-color: rgba(255,255,255,.45); color: #fff; }
@@ -336,7 +407,7 @@
       .hero h1 { font-size: clamp(44px,13vw,67px); }
       .hero::before, .hero::after { display: none; }
       .settings-heading, .closing-card { align-items: flex-start; flex-direction: column; }
-      .settings-grid, .role-grid, .ceremony-grid, .monthly-cycle, .responsibility-grid, .change-rules, .backlog-flow, .value-points, .alcance-grid, .soporte-flow, .ingenieria-grid, .gobierno-grid, .mejoras-grid, .mejoras-warranty, .dor-dod { grid-template-columns: 1fr; }
+      .settings-grid, .role-grid, .ceremony-grid, .monthly-cycle, .responsibility-grid, .change-rules, .backlog-flow, .value-points, .alcance-grid, .soporte-flow, .ingenieria-grid, .gobierno-grid, .mejoras-grid, .mejoras-warranty, .dor-dod, .hitos-grid, .entregables-tecnicos-grid, .cambio-grid, .cambio-compromiso, .herramientas-grid, .seguridad-grid, .garantia-box { grid-template-columns: 1fr; }
       .settings-grid label:last-child, .value-points, .intro-copy, .formal-note { grid-column: auto; }
       .ceremony-card:last-child { grid-column: auto; }
       .role-card:last-child:nth-child(odd) { grid-column: auto; }
@@ -439,7 +510,7 @@
       .change-rule, .responsibility-card, .sprint-zero, .commercial-table,
       .scale-card, .closing-card, .alcance-card, .alcance-exclusion,
       .soporte-schedule, .soporte-sla, .soporte-step, .soporte-continuidad,
-      .ingenieria-card, .ingenieria-doc, .kpi-table, .kpi-table-row, .kpi-note, .gobierno-card, .mejoras-step, .warranty-box, .dor-card { break-inside: avoid; page-break-inside: avoid; }
+      .ingenieria-card, .ingenieria-doc, .kpi-table, .kpi-table-row, .kpi-note, .gobierno-card, .mejoras-step, .warranty-box, .dor-card, .hito-card, .entregable-tec, .cambio-card, .cambio-stat { break-inside: avoid; page-break-inside: avoid; }
       p, li { orphans: 3; widows: 3; }
     }
   </style>
@@ -464,7 +535,7 @@
       </a>
       <div class="top-actions">
         <nav class="top-nav" aria-label="Secciones de la propuesta">
-          <a href="#alcance">Alcance</a><a href="#modelo">Modelo</a><a href="#metodologia">Metodología</a><a href="#comercial">Comercial</a>
+          <a href="#alcance">Alcance</a><a href="#modelo">Modelo</a><a href="#metodologia">Metodología</a><a href="#capacitacion">Capacitación</a><a href="#entregables">Entregables</a><a href="#seguridad">Seguridad & PI</a><a href="#comercial">Comercial</a>
         </nav>
         <button class="button button-ghost" id="settings-toggle">Configurar propuesta</button>
         <button class="button button-ghost" id="download-html-button" title="Descarga una copia que funciona sin conexión">Descargar web</button>
@@ -573,6 +644,34 @@
           </ul>
         </div>
       </div>
+      <div class="herramientas-block">
+        <div class="herramientas-title">
+          <h3>Ecosistema de Herramientas Colaborativas y Modalidad de Trabajo</h3>
+          <span class="herramientas-badge">SIN COSTO ADICIONAL PARA SERVIU</span>
+        </div>
+        <div class="herramientas-grid">
+          <article class="herramienta-card">
+            <small>GESTIÓN DE BACKLOG & SPRINTS</small>
+            <strong>Jira / GitHub Projects</strong>
+            <p>Administración transparente del Product Backlog único, tableros Kanban/Scrum, asignación de tareas, estimaciones y trazabilidad de historias de usuario en tiempo real.</p>
+          </article>
+          <article class="herramienta-card">
+            <small>ARQUITECTURA & DIAGRAMAS</small>
+            <strong>Miro / Lucidchart / Notion</strong>
+            <p>Modelado de procesos, arquitectura de software, mapas de flujo de datos, documentación técnica interactiva y minutas acordadas en refinamientos.</p>
+          </article>
+          <article class="herramienta-card">
+            <small>COMUNICACIÓN & SINCRONIZACIÓN</small>
+            <strong>Slack / MS Teams / Workspace</strong>
+            <p>Canales dedicados para comunicación fluida diaria entre los integrantes de la célula y la contraparte técnica de SERVIU Metropolitano.</p>
+          </article>
+          <article class="herramienta-card">
+            <small>MODALIDAD DE EJECUCIÓN</small>
+            <strong>Presencial, Remota o Híbrida</strong>
+            <p>Adaptabilidad total del esquema de trabajo según requerimientos del Servicio, combinando mesas de trabajo presenciales con desarrollo remoto eficiente.</p>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="content-section backlog-section" id="backlog">
@@ -669,14 +768,151 @@
       <div class="kpi-note"><strong>MECANISMO DE REVISIÓN Y PENALIZACIONES</strong>Los indicadores anteriores podrán ser revisados y ajustados de común acuerdo entre las partes, previa solicitud fundada. El incumplimiento reiterado de los SLA de soporte será sujeto a la aplicación de multas (0,5 UF por cada día de atraso, con tope de 10 UF) conforme a lo establecido en las bases de contratación.</div>
     </section>
 
+    <section class="content-section entregables-section" id="entregables">
+      <div class="section-heading"><span class="section-number">09</span><div><span class="section-kicker">ENTREGABLES FORMALES</span><h2>Trazabilidad completa del trabajo realizado.</h2><p>AtomDev generará y entregará a la contraparte institucional los productos y registros de cada proyecto, garantizando la visibilidad del proceso bajo metodología ágil.</p></div></div>
+      <div class="hitos-grid">
+        <div class="hito-card">
+          <div class="hito-num"><span class="hito-num-circle">H1</span><span class="hito-num-label">Hito 1</span></div>
+          <h3>Diagnóstico Inicial y Plan de Trabajo Anual</h3>
+          <p class="hito-plazo">Plazo: máximo 1 mes desde la reunión de inicio</p>
+          <ul class="hito-list">
+            <li>Informe de diagnóstico del estado del portafolio de proyectos.</li>
+            <li>Identificación de brechas y oportunidades de mejora.</li>
+            <li>Plan de implementación de metodología ágil.</li>
+            <li>Propuesta de roadmap anual de evolución de ServiuPro.</li>
+          </ul>
+        </div>
+        <div class="hito-card">
+          <div class="hito-num"><span class="hito-num-circle">H2</span><span class="hito-num-label">Hito 2</span></div>
+          <h3>Informes Mensuales de Avance</h3>
+          <p class="hito-plazo">Plazo: 10 días hábiles para revisión de SERVIU</p>
+          <ul class="hito-list">
+            <li>Documento de inicio y levantamiento de requerimientos.</li>
+            <li>Registro actualizado del Product Backlog institucional.</li>
+            <li>Planificación de sprints o iteraciones del período.</li>
+            <li>Reporte de avance del sprint y cumplimiento de KPI/SLA.</li>
+            <li>Registro de talleres, sesiones y retrospectivas.</li>
+          </ul>
+        </div>
+        <div class="hito-card">
+          <div class="hito-num"><span class="hito-num-circle">H3</span><span class="hito-num-label">Hito 3</span></div>
+          <h3>Informe Final por Proyecto</h3>
+          <p class="hito-plazo">Plazo: 10 días hábiles para revisión de SERVIU</p>
+          <ul class="hito-list">
+            <li>Resumen ejecutivo, antecedentes y objetivos del proyecto.</li>
+            <li>Diagnóstico inicial y descripción del trabajo ágil realizado.</li>
+            <li>Definición del MVP y resultados obtenidos.</li>
+            <li>Backlog completo, pendiente y deuda técnica remanente.</li>
+            <li>Hoja de ruta de continuidad y lecciones aprendidas.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="entregables-tecnicos">
+        <div class="entregables-tecnicos-label">Entregables Técnicos Asociados por Proyecto</div>
+        <div class="entregables-tecnicos-grid">
+          <div class="entregable-tec"><strong>Código Fuente</strong><span>Versión final en repositorio Git y soporte físico/virtual acordado con SERVIU Metropolitano.</span></div>
+          <div class="entregable-tec"><strong>Compilado de la Aplicación</strong><span>Build de producción correspondiente a la misma versión final que el código fuente entregado.</span></div>
+          <div class="entregable-tec"><strong>Documentación Técnica</strong><span>Toma de requerimientos, planificación ágil, diagramas de flujo, maquetas y prototipos.</span></div>
+          <div class="entregable-tec"><strong>Documentación de Base de Datos</strong><span>Diagrama, modelo lógico y físico, y diccionario de datos actualizado al cierre.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section cambio-section" id="capacitacion">
+      <div class="section-heading"><span class="section-number">10</span><div><span class="section-kicker">GESTIÓN DEL CAMBIO Y CAPACITACIÓN</span><h2>Acompañar la adopción es parte del servicio.</h2><p>AtomDev asume la responsabilidad de que cada mejora sea efectivamente utilizada por las personas. La entrega técnica no es el último paso: el valor se completa cuando los usuarios operan con confianza.</p></div></div>
+      <div class="cambio-grid">
+        <div class="cambio-card">
+          <span class="cambio-icon">GC</span>
+          <h3>Plan de Gestión del Cambio</h3>
+          <ul>
+            <li>Elaboración de un plan de gestión del cambio para cada iniciativa relevante de la cartera.</li>
+            <li>Identificación de actores impactados y riesgos de adopción.</li>
+            <li>Acompañamiento directo durante la puesta en marcha de cada mejora o nuevo proceso.</li>
+            <li>Comunicación oportuna a las áreas de negocio sobre cambios funcionales que impacten su operación.</li>
+          </ul>
+        </div>
+        <div class="cambio-card">
+          <span class="cambio-icon">CAP</span>
+          <h3>Capacitación de Usuarios</h3>
+          <ul>
+            <li>Sesiones formales de capacitación para usuarios finales ante cada nueva funcionalidad.</li>
+            <li>Material de apoyo: manuales, guías rápidas y videos según se acuerde con la contraparte.</li>
+            <li>Resolución de dudas y ajustes menores derivados de la adopción inicial.</li>
+            <li>Registro de participantes y evidencia de las sesiones ejecutadas.</li>
+          </ul>
+        </div>
+        <div class="cambio-card">
+          <span class="cambio-icon">KT</span>
+          <h3>Transferencia de Conocimiento</h3>
+          <ul>
+            <li>Instancias periódicas de transferencia técnica y metodológica al equipo de SERVIU Metropolitano.</li>
+            <li>Repositorio de conocimiento actualizado: documentación, decisiones de diseño y lecciones aprendidas.</li>
+            <li>Objetivo explícito: incrementar progresivamente la autonomía del equipo interno sobre ServiuPro.</li>
+            <li>Acceso permanente de la contraparte técnica a todo el repositorio de conocimiento.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cambio-compromiso">
+        <div class="cambio-stat"><span class="cambio-stat-num">100%</span><span class="cambio-stat-label">de las funcionalidades con plan de adopción antes del despliegue en producción.</span></div>
+        <div class="cambio-stat"><span class="cambio-stat-num">1</span><span class="cambio-stat-label">sesión de capacitación formal por cada nueva funcionalidad entregada.</span></div>
+        <div class="cambio-stat"><span class="cambio-stat-num">∞</span><span class="cambio-stat-label">repositorio de conocimiento accesible para SERVIU Metropolitano en todo momento.</span></div>
+      </div>
+    </section>
+
+    <section class="content-section seguridad-section" id="seguridad">
+      <div class="section-heading"><span class="section-number">11</span><div><span class="section-kicker">SEGURIDAD, CONFIDENCIALIDAD Y PROPIEDAD INTELECTUAL</span><h2>Protección de datos, resguardo institucional y transferencia total.</h2><p>Garantizamos el cumplimiento estricto de las políticas MINVU, la normativa de protección de datos y la titularidad exclusiva de SERVIU Metropolitano sobre todo desarrollo.</p></div></div>
+      <div class="seguridad-grid">
+        <div class="seguridad-card">
+          <span class="seguridad-card-icon">SEC</span>
+          <h3>Seguridad & Políticas MINVU</h3>
+          <p>Cumplimiento íntegro de las políticas de seguridad de la información vigentes del Ministerio de Vivienda y Urbanismo.</p>
+          <ul>
+            <li>Gestión segura de cuentas de usuario, credenciales y accesos a sistemas.</li>
+            <li>Resguardo de información en equipos y canales de comunicación.</li>
+            <li>Continuidad operacional y ventanas de mantenimiento acordadas.</li>
+            <li>Protocolos de respuesta inmediata ante incidentes según SLA.</li>
+          </ul>
+        </div>
+        <div class="seguridad-card">
+          <span class="seguridad-card-icon">PRIV</span>
+          <h3>Confidencialidad (Ley N° 19.628)</h3>
+          <p>Tratamiento estrictamente confidencial de todo antecedente, dato o documento institucional del Servicio.</p>
+          <ul>
+            <li>Absoluta reserva durante la vigencia del contrato y posterior a su finalización.</li>
+            <li>Alineación con la Ley N° 19.628 de Protección de la Vida Privada.</li>
+            <li>Compromiso de confidencialidad de todos los integrantes de la célula.</li>
+            <li>Uso de información limitado exclusivamente a fines del servicio.</li>
+          </ul>
+        </div>
+        <div class="seguridad-card">
+          <span class="seguridad-card-icon">PI</span>
+          <h3>Propiedad Intelectual & Transferencia</h3>
+          <p>Titularidad 100% exclusiva de SERVIU Metropolitano sobre código fuente, bases de datos y productos.</p>
+          <ul>
+            <li>Entrega física y virtual de código fuente, compilados y documentación.</li>
+            <li>Código abierto, modular y libre de dependencias propietarias no autorizadas.</li>
+            <li>Transferencia tecnológica continua para asegurar la autonomía de SERVIU.</li>
+            <li>Sin cláusulas de retención ni dependencia exclusiva con el proveedor.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="garantia-box">
+        <div class="garantia-info">
+          <strong>Garantía de Software: 6 Meses Mínimo</strong>
+          <p>Cobertura ante cualquier defecto, error o salida no conforme a partir de la recepción conforme de las mejoras por SERVIU Metropolitano.</p>
+        </div>
+        <div class="garantia-badge">6 MESES GARANTÍA</div>
+      </div>
+    </section>
+
     <section class="content-section responsibility-section" id="roles">
-      <div class="section-heading"><span class="section-number">09</span><div><span class="section-kicker">GOBERNANZA DE LA COLABORACIÓN</span><h2>Responsabilidades claras para que el modelo funcione.</h2><p>La agilidad necesita participación de ambas partes, acuerdos oportunos y una única visión de las prioridades.</p></div></div>
+      <div class="section-heading"><span class="section-number">12</span><div><span class="section-kicker">GOBERNANZA DE LA COLABORACIÓN</span><h2>Responsabilidades claras para que el modelo funcione.</h2><p>La agilidad necesita participación de ambas partes, acuerdos oportunos y una única visión de las prioridades.</p></div></div>
       <div class="responsibility-grid"><article class="responsibility-card"><h3>AtomDev</h3><ul><li>Proveer y coordinar la célula de trabajo.</li><li>Facilitar las ceremonias y mantener el flujo ágil.</li><li>Estimar, construir, probar y demostrar los avances.</li><li>Informar riesgos, impedimentos y dependencias.</li><li>Mantener actualizado el estado del backlog y del sprint.</li></ul></article><article class="responsibility-card serviu"><h3>Serviu Metropolitano</h3><ul><li>Definir prioridades y validar el objetivo del sprint.</li><li>Entregar información, accesos y decisiones necesarias.</li><li>Participar en refinamientos y revisiones de sprint.</li><li>Validar los criterios de aceptación y observaciones.</li><li>Acordar las mejoras que pasarán al backlog.</li></ul></article></div>
       <div class="sprint-zero"><b>0</b><div><strong>Puesta en marcha sugerida: Sprint 0 de alineación</strong><small>Antes del primer sprint mensual, se recomienda acordar objetivos, roles, canales, criterios de aceptación, accesos y prioridades iniciales.</small></div></div>
     </section>
 
     <section class="content-section commercial-section" id="comercial">
-      <div class="section-heading"><span class="section-number">10</span><div><span class="section-kicker">MODELO COMERCIAL</span><h2>Una estructura simple, transparente y escalable.</h2><p>El valor corresponde a la capacidad de una célula ágil completa durante un sprint mensual.</p></div></div>
+      <div class="section-heading"><span class="section-number">13</span><div><span class="section-kicker">MODELO COMERCIAL</span><h2>Una estructura simple, transparente y escalable.</h2><p>El valor corresponde a la capacidad de una célula ágil completa durante un sprint mensual.</p></div></div>
       <div class="commercial-layout"><div><div class="commercial-table"><div class="commercial-row"><span>Valor hora</span><strong><span id="commercial-rate">1</span> UF</strong></div><div class="commercial-row"><span>Capacidad semanal</span><strong><span id="commercial-hours">44</span> horas</strong></div><div class="commercial-row"><span>Duración del sprint</span><strong><span id="commercial-weeks">4</span> semanas</strong></div><div class="commercial-row"><span>Valor de una célula</span><strong><span id="commercial-cell-value">176</span> UF</strong></div><div class="commercial-row total"><span>Valor total contratado</span><strong><span id="commercial-total-value">176</span> UF / sprint</strong></div></div><p class="commercial-note">El valor corresponde a la capacidad del equipo durante el sprint. La ejecución se organiza según el backlog priorizado y no según una cantidad fija de tickets.</p></div><aside class="scale-card"><span>ESCALABILIDAD DEL MODELO</span><h3>Más proyectos, más células.</h3><p>Una célula puede atender un proyecto de referencia. Para trabajar proyectos adicionales en paralelo, se incorpora una nueva célula con la misma composición y capacidad.</p><div class="scale-highlight"><i>+</i><strong id="scale-value">176 UF por cada célula adicional</strong></div></aside></div>
     </section>
 
