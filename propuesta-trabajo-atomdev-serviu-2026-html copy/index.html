@@ -152,6 +152,17 @@
     .cycle-step b { display: block; margin-bottom: 12px; color: var(--teal-dark); font-family: var(--mono); font-size: 10px; }
     .cycle-step:nth-child(4) b { color: var(--pink-dark); }
 
+    .dor-dod { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-top: 20px; }
+    .dor-card { padding: 26px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .dor-card.dod { border-top-color: var(--pink); }
+    .dor-label { display: inline-block; margin-bottom: 12px; padding: 4px 10px; border-radius: 4px; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .07em; }
+    .dor-card.dod .dor-label { background: var(--pink-light); color: var(--pink-dark); }
+    .dor-card h3 { margin: 0 0 14px; color: var(--ink-deep); font-size: 20px; font-weight: 500; letter-spacing: -.03em; }
+    .dor-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .dor-list li { position: relative; padding-left: 20px; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+    .dor-list li::before { position: absolute; left: 0; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); content: ""; }
+    .dor-card.dod .dor-list li::before { background: var(--pink); }
+
     .backlog-section { background: #f1f7f8; }
     .backlog-flow { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 10px; }
     .backlog-step { position: relative; padding: 23px 19px; border: 1px solid var(--line); background: var(--surface); }
@@ -325,7 +336,7 @@
       .hero h1 { font-size: clamp(44px,13vw,67px); }
       .hero::before, .hero::after { display: none; }
       .settings-heading, .closing-card { align-items: flex-start; flex-direction: column; }
-      .settings-grid, .role-grid, .ceremony-grid, .monthly-cycle, .responsibility-grid, .change-rules, .backlog-flow, .value-points, .alcance-grid, .soporte-flow, .ingenieria-grid, .gobierno-grid, .mejoras-grid, .mejoras-warranty { grid-template-columns: 1fr; }
+      .settings-grid, .role-grid, .ceremony-grid, .monthly-cycle, .responsibility-grid, .change-rules, .backlog-flow, .value-points, .alcance-grid, .soporte-flow, .ingenieria-grid, .gobierno-grid, .mejoras-grid, .mejoras-warranty, .dor-dod { grid-template-columns: 1fr; }
       .settings-grid label:last-child, .value-points, .intro-copy, .formal-note { grid-column: auto; }
       .ceremony-card:last-child { grid-column: auto; }
       .role-card:last-child:nth-child(odd) { grid-column: auto; }
@@ -428,7 +439,7 @@
       .change-rule, .responsibility-card, .sprint-zero, .commercial-table,
       .scale-card, .closing-card, .alcance-card, .alcance-exclusion,
       .soporte-schedule, .soporte-sla, .soporte-step, .soporte-continuidad,
-      .ingenieria-card, .ingenieria-doc, .kpi-table, .kpi-table-row, .kpi-note, .gobierno-card, .mejoras-step, .warranty-box { break-inside: avoid; page-break-inside: avoid; }
+      .ingenieria-card, .ingenieria-doc, .kpi-table, .kpi-table-row, .kpi-note, .gobierno-card, .mejoras-step, .warranty-box, .dor-card { break-inside: avoid; page-break-inside: avoid; }
       p, li { orphans: 3; widows: 3; }
     }
   </style>
@@ -538,6 +549,30 @@
         <article class="ceremony-card"><span>MEJORA</span><h3>Retrospectiva</h3><p>Identificación de aprendizajes y acuerdos para mejorar continuamente la forma de trabajo.</p></article>
       </div>
       <div class="monthly-cycle"><div class="cycle-step"><b>SEMANA 01</b><strong>Planificar</strong><small>Definir objetivo, revisar prioridades y comprometer el alcance.</small></div><div class="cycle-step"><b>SEMANA 02</b><strong>Construir</strong><small>Desarrollar, probar y conversar sobre los avances del sprint.</small></div><div class="cycle-step"><b>SEMANA 03</b><strong>Refinar</strong><small>Preparar requerimientos futuros y anticipar decisiones necesarias.</small></div><div class="cycle-step"><b>SEMANA 04</b><strong>Revisar y mejorar</strong><small>Mostrar resultados, recoger observaciones y acordar próximos pasos.</small></div></div>
+      <div class="dor-dod">
+        <div class="dor-card">
+          <span class="dor-label">DEFINITION OF READY (DoR)</span>
+          <h3>Criterios para iniciar un sprint</h3>
+          <ul class="dor-list">
+            <li>Descripción clara del requerimiento como historia de usuario.</li>
+            <li>Criterios de aceptación definidos y acordados con el área de negocio.</li>
+            <li>Dependencias técnicas y funcionales identificadas.</li>
+            <li>Estimación de esfuerzo (HH) realizada por el equipo.</li>
+            <li>Validación previa del área de negocio de SERVIU Metropolitano.</li>
+          </ul>
+        </div>
+        <div class="dor-card dod">
+          <span class="dor-label">DEFINITION OF DONE (DoD)</span>
+          <h3>Criterios para cerrar un desarrollo</h3>
+          <ul class="dor-list">
+            <li>Código desarrollado conforme a estándares Clean Code y SOLID.</li>
+            <li>Pruebas unitarias e integración ejecutadas y aprobadas (cobertura ≥ 70%).</li>
+            <li>Documentación técnica y funcional generada y entregada.</li>
+            <li>Validación del área de negocio en ambiente de testing completada.</li>
+            <li>Despliegue exitoso en el ambiente correspondiente.</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <section class="content-section backlog-section" id="backlog">
