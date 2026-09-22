@@ -6,3 +6,6 @@ dist/
 build/
 *.log
 propuesta-trabajo-atomdev-serviu-2026-html copy/pliego_de_requerimientos_serviupro.md
+propuesta-trabajo-atomdev-serviu-2026-html/pliego_de_requerimientos_serviupro.md
+.gitignore
+propuesta-trabajo-atomdev-serviu-2026-html/contraste-pliego-propuesta.md
