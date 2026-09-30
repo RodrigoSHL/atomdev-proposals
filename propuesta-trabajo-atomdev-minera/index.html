@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Propuesta económica preliminar de AtomDev para una plataforma de inspección y mantenimiento de activos eléctricos y mineros.">
+  <meta property="og:title" content="Propuesta económica minera · AtomDev">
+  <meta property="og:description" content="Implementación y licenciamiento SaaS de una plataforma especializada para inspección de activos en terreno.">
+  <meta property="og:type" content="website">
+  <title>Propuesta económica minera · AtomDev</title>
+  <style>
+    :root {
+      --ink: #5f6062;
+      --ink-deep: #45474a;
+      --ink-soft: #77797d;
+      --paper: #fafbfc;
+      --surface: #fff;
+      --line: #e1e5e8;
+      --teal: #08aabd;
+      --teal-dark: #007d91;
+      --teal-light: #e1f7fa;
+      --pink: #ff0a5c;
+      --pink-dark: #c90047;
+      --pink-light: #ffe5ee;
+      --shadow: 0 20px 55px rgba(75, 76, 78, .12);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: Calibri, "Segoe UI", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    button { font: inherit; color: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid rgba(8,170,189,.25); outline-offset: 3px; }
+    .site-shell { min-height: 100vh; overflow: hidden; }
+    .topbar { position: sticky; z-index: 30; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 76px; padding: 12px clamp(22px,5vw,76px); border-bottom: 1px solid rgba(225,229,232,.9); background: rgba(250,251,252,.94); backdrop-filter: blur(16px); }
+    .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; flex: none; }
+    .brand-mark, .brand-mark svg { display: block; width: 46px; height: 46px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { font-size: 20px; font-weight: 600; letter-spacing: -.03em; }
+    .brand small { margin-top: 1px; color: var(--ink-soft); font-size: 12px; }
+    .top-actions, .top-nav { display: flex; align-items: center; gap: 8px; }
+    .top-nav { margin-right: 10px; }
+    .top-nav a { padding: 8px 9px; color: var(--ink-soft); font-size: 12px; text-decoration: none; }
+    .top-nav a:hover { color: var(--teal-dark); }
+    .button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); cursor: pointer; font-size: 13px; font-weight: 600; transition: transform .16s ease, background .16s ease; }
+    .button:hover { transform: translateY(-1px); }
+    .button-primary { border-color: var(--teal); background: var(--teal); color: #fff; }
+    .button-primary:hover { background: var(--teal-dark); }
+    .button-ghost { border-color: transparent; background: transparent; }
+    .hero { position: relative; display: grid; grid-template-columns: minmax(0,1.3fr) minmax(300px,.7fr); align-items: end; gap: clamp(36px,8vw,105px); min-height: 650px; padding: clamp(82px,11vw,145px) clamp(22px,7vw,108px) clamp(72px,9vw,110px); background: radial-gradient(circle at 84% 19%, rgba(255,10,92,.12), transparent 28%), radial-gradient(circle at 10% 86%, rgba(8,170,189,.12), transparent 33%), var(--paper); }
+    .hero::before { position: absolute; top: 65px; right: 7vw; width: 170px; height: 170px; border: 1px solid rgba(8,170,189,.2); border-radius: 50%; content: ""; }
+    .hero::after { position: absolute; top: 108px; right: calc(7vw + 42px); width: 82px; height: 82px; border-radius: 50%; background: rgba(255,10,92,.12); content: ""; }
+    .hero-copy, .hero-summary { position: relative; z-index: 1; }
+    .eyebrow, .section-kicker { color: var(--teal-dark); font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+    .hero h1 { max-width: 900px; margin: 18px 0 24px; color: var(--ink-deep); font-size: clamp(46px,6.5vw,86px); font-weight: 500; letter-spacing: -.055em; line-height: .97; }
+    .hero-copy > p { max-width: 760px; margin: 0; color: var(--ink-soft); font-size: clamp(19px,2vw,25px); line-height: 1.48; }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .hero-tags span { padding: 9px 12px; border: 1px solid rgba(8,170,189,.25); border-radius: 999px; background: rgba(255,255,255,.72); color: var(--teal-dark); font-size: 12px; font-weight: 600; }
+    .hero-summary { padding: 28px; border-top: 4px solid var(--pink); background: var(--surface); box-shadow: var(--shadow); }
+    .hero-summary > span, .hero-summary > small { display: block; color: var(--ink-soft); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; }
+    .hero-summary h2 { margin: 12px 0 2px; color: var(--ink-deep); font-size: clamp(34px,4vw,52px); font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+    .hero-summary h2 em { color: var(--pink); font-style: normal; }
+    .hero-rule { height: 1px; margin: 22px 0; background: var(--line); }
+    .hero-summary p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+    .hero-summary strong { color: var(--ink-deep); }
+    .content-section { padding: clamp(76px,9vw,122px) clamp(22px,7vw,108px); border-top: 1px solid var(--line); }
+    .section-heading { display: flex; align-items: flex-start; gap: 18px; max-width: 1050px; margin-bottom: clamp(34px,5vw,62px); }
+    .section-number { display: grid; flex: none; width: 48px; height: 48px; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal-dark); font-family: var(--mono); font-size: 12px; font-weight: 700; }
+    .section-heading h2 { margin: 6px 0 0; color: var(--ink-deep); font-size: clamp(30px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .section-heading p { margin: 12px 0 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+    h3 { color: var(--ink-deep); font-weight: 500; letter-spacing: -.03em; }
+    .lead { max-width: 760px; margin: 0 0 20px; color: var(--ink-soft); font-size: 20px; line-height: 1.6; }
+    .lead strong, .body-copy strong { color: var(--ink-deep); }
+    .body-copy { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+    .split { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(300px,.8fr); gap: clamp(24px,5vw,68px); align-items: start; }
+    .statement { padding: 26px; border-left: 4px solid var(--teal); background: var(--teal-light); color: var(--teal-dark); }
+    .statement.pink { border-left-color: var(--pink); background: var(--pink-light); color: var(--pink-dark); }
+    .statement b { display: block; margin-bottom: 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
+    .statement p { margin: 0; font-size: 15px; line-height: 1.55; }
+    .statement strong { color: var(--ink-deep); }
+    .mini-grid, .scope-grid, .step-grid, .plan-grid, .service-grid, .alt-grid, .conditions-grid { display: grid; gap: 12px; }
+    .mini-grid { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 28px; }
+    .mini-card, .scope-card, .step-card, .service-card, .alt-card, .condition-card { padding: 23px; border: 1px solid var(--line); background: var(--surface); }
+    .mini-card { border-top: 4px solid var(--teal); }
+    .mini-card:nth-child(2), .mini-card:nth-child(3) { border-top-color: var(--pink); }
+    .mini-card strong { display: block; color: var(--ink-deep); font-size: 17px; font-weight: 600; }
+    .mini-card p, .scope-card p, .step-card p, .service-card p, .alt-card p, .condition-card p { margin: 8px 0 0; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+    .solution-section, .saas-section, .comparison-section { background: var(--surface); }
+    .scope-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .scope-card { min-height: 170px; }
+    .scope-card:nth-child(even) { background: #fbfcfc; }
+    .scope-card span, .step-card span { display: inline-grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; }
+    .scope-card:nth-child(even) span, .step-card:nth-child(even) span { background: var(--pink-light); color: var(--pink-dark); }
+    .scope-card h3, .step-card h3 { margin: 15px 0 0; font-size: 19px; }
+    .section-subhead { margin: 32px 0 16px; font-size: 25px; }
+    .accent-band { margin-top: 20px; padding: 22px 24px; border-left: 4px solid var(--pink); background: var(--pink-light); color: var(--pink-dark); font-size: 14px; line-height: 1.55; }
+    .accent-band strong { color: var(--ink-deep); }
+    .implementation-section { background: #f1f7f8; }
+    .step-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
+    .step-card { min-height: 205px; }
+    .price-strip { display: flex; align-items: center; justify-content: space-between; gap: 30px; margin-top: 20px; padding: 25px 28px; background: var(--ink-deep); color: #fff; }
+    .price-strip small, .price-strip strong { display: block; }
+    .price-strip small { color: #70e0ea; font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .price-strip strong { margin-top: 6px; font-size: 29px; font-weight: 500; letter-spacing: -.04em; }
+    .price-strip p { max-width: 680px; margin: 0; color: rgba(255,255,255,.75); font-size: 13px; line-height: 1.5; }
+    .plan-grid { grid-template-columns: repeat(3,minmax(0,1fr)); align-items: stretch; }
+    .plan-card { display: flex; flex-direction: column; padding: 28px 24px; border: 1px solid var(--line); border-top: 4px solid var(--teal); background: var(--surface); }
+    .plan-card.featured { border-color: rgba(255,10,92,.38); border-top-color: var(--pink); box-shadow: var(--shadow); }
+    .plan-card:last-child { border-top-color: var(--pink); background: #fffafb; }
+    .plan-card > small { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .plan-card.featured > small, .plan-card:last-child > small { color: var(--pink-dark); }
+    .plan-card h3 { margin: 11px 0 4px; font-size: 27px; }
+    .plan-price { margin: 18px 0; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .plan-price strong { color: var(--ink-deep); font-size: 42px; font-weight: 500; letter-spacing: -.05em; }
+    .plan-price span { color: var(--ink-soft); font-size: 13px; }
+    .plan-clp { display: block; margin: -8px 0 18px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .clean-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .clean-list li { position: relative; padding-left: 20px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
+    .clean-list li::before { position: absolute; left: 0; color: var(--teal); content: "✓"; font-weight: 700; }
+    .plan-card.featured .clean-list li::before, .plan-card:last-child .clean-list li::before { color: var(--pink); }
+    .plan-note { margin: auto 0 0; padding-top: 20px; color: var(--ink-soft); font-size: 11px; line-height: 1.45; }
+    .saas-footnote { margin: 18px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.5; }
+    .service-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .service-card { border-top: 4px solid var(--teal); }
+    .service-card:last-child { border-top-color: var(--pink); }
+    .service-card h3 { margin: 0 0 14px; font-size: 23px; }
+    .service-card .clean-list { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px 15px; }
+    .service-card:last-child .clean-list li::before { color: var(--pink); }
+    .extras-section { background: #f1f7f8; }
+    .extras-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(280px,.9fr); gap: 18px; }
+    .extras-card { padding: 28px; border: 1px solid var(--line); background: var(--surface); }
+    .extras-card h3 { margin: 0 0 18px; font-size: 25px; }
+    .extras-card .clean-list li::before { color: var(--pink); content: "—"; }
+    .rate-card { padding: 28px; border-top: 4px solid var(--pink); background: var(--pink-light); }
+    .rate-card small { color: var(--pink-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .rate-card strong { display: block; margin: 12px 0 7px; color: var(--ink-deep); font-size: 38px; font-weight: 500; letter-spacing: -.05em; }
+    .rate-card p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+    .ip-section { background: var(--ink-deep); color: #fff; }
+    .ip-section .section-number { border-color: rgba(255,255,255,.45); color: #fff; }
+    .ip-section .section-kicker { color: #70e0ea; }
+    .ip-section .section-heading h2, .ip-section h3 { color: #fff; }
+    .ip-section .section-heading p { color: rgba(255,255,255,.68); }
+    .ip-layout { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(280px,.9fr); gap: 20px; }
+    .ip-card { padding: 30px; background: rgba(255,255,255,.08); }
+    .ip-card h3 { margin: 0 0 16px; font-size: 26px; }
+    .ip-card p, .ip-card li { color: rgba(255,255,255,.76); font-size: 14px; line-height: 1.55; }
+    .ip-card p { margin: 0 0 14px; }
+    .ip-card .clean-list li::before { color: #70e0ea; }
+    .ip-callout { padding: 28px; border-top: 4px solid var(--pink); background: #fff; }
+    .ip-callout b { color: var(--pink-dark); font-family: var(--mono); font-size: 10px; letter-spacing: .1em; }
+    .ip-callout p { margin: 14px 0 0; color: var(--ink-soft); font-size: 18px; line-height: 1.5; }
+    .ip-callout strong { color: var(--ink-deep); }
+    .alternatives-section { background: #f1f7f8; }
+    .alt-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .alt-card { border-top: 4px solid var(--teal); }
+    .alt-card:last-child { border-top-color: var(--pink); }
+    .alt-card small { color: var(--teal-dark); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+    .alt-card:last-child small { color: var(--pink-dark); }
+    .alt-card h3 { margin: 10px 0 2px; font-size: 25px; }
+    .alt-price { display: block; margin: 15px 0; color: var(--ink-deep); font-size: 35px; font-weight: 500; letter-spacing: -.04em; }
+    .alt-card .clean-list { margin-top: 16px; }
+    .comparison-table { width: 100%; border-collapse: collapse; background: var(--surface); }
+    .comparison-table th, .comparison-table td { padding: 17px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .comparison-table th { background: var(--ink-deep); color: #fff; font-size: 12px; font-weight: 600; }
+    .comparison-table td { color: var(--ink-soft); font-size: 14px; line-height: 1.4; }
+    .comparison-table td:first-child { color: var(--ink-deep); font-weight: 600; }
+    .comparison-table tbody tr:nth-child(even) { background: #fbfcfc; }
+    .comparison-table tbody tr:first-child td:last-child { color: var(--pink-dark); font-weight: 700; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); }
+    .table-note { margin: 17px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
+    .conditions-section { background: #f1f7f8; }
+    .conditions-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .condition-card h3 { margin: 0 0 12px; font-size: 24px; }
+    .condition-card .clean-list li { font-size: 13px; }
+    .condition-card:nth-child(even) { border-top: 4px solid var(--pink); }
+    .condition-card:nth-child(odd) { border-top: 4px solid var(--teal); }
+    .condition-card:nth-child(even) .clean-list li::before { color: var(--pink); }
+    .closing-section { background: var(--pink-light); }
+    .closing-card { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: clamp(28px,5vw,54px); border: 1px solid rgba(255,10,92,.23); background: var(--surface); box-shadow: var(--shadow); }
+    .closing-card h2 { max-width: 730px; margin: 8px 0 12px; color: var(--ink-deep); font-size: clamp(29px,4vw,48px); font-weight: 500; letter-spacing: -.04em; }
+    .closing-card p { max-width: 790px; margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.55; }
+    .next-list { display: grid; gap: 10px; margin: 22px 0 0; padding: 0; list-style: none; }
+    .next-list li { color: var(--ink-soft); font-size: 14px; }
+    .next-list b { display: inline-grid; width: 28px; height: 28px; margin-right: 9px; place-items: center; border-radius: 50%; background: var(--teal-light); color: var(--teal-dark); font-family: var(--mono); font-size: 10px; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 32px clamp(22px,7vw,108px); background: var(--ink-deep); color: #fff; }
+    footer strong, footer span { display: block; }
+    footer strong { font-size: 13px; }
+    footer span, footer p { color: rgba(255,255,255,.58); font-size: 11px; }
+    footer span { margin-top: 5px; }
+    footer p { max-width: 460px; margin: 0; text-align: right; line-height: 1.5; }
+    @media (max-width: 1080px) { .top-nav { display: none; } }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-summary { max-width: 460px; }
+      .scope-grid, .step-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .split, .extras-layout, .ip-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .topbar { align-items: flex-start; }
+      .brand small { display: none; }
+      .top-actions { flex-wrap: wrap; justify-content: flex-end; }
+      .button { min-height: 36px; padding: 0 11px; font-size: 11px; }
+      .hero { padding-top: 72px; }
+      .hero h1 { font-size: clamp(44px,13vw,67px); }
+      .hero::before, .hero::after { display: none; }
+      .section-heading { flex-direction: column; }
+      .mini-grid, .scope-grid, .step-grid, .plan-grid, .service-grid, .alt-grid, .conditions-grid, .service-card .clean-list { grid-template-columns: 1fr; }
+      .price-strip, .closing-card { align-items: flex-start; flex-direction: column; }
+      .comparison-table { min-width: 760px; }
+      footer { align-items: flex-start; flex-direction: column; }
+      footer p { text-align: left; }
+    }
+    @media print {
+      @page { size: A4 landscape; margin: 11mm; }
+      :root { --paper: #fff; }
+      html, body { background: #fff; }
+      body { font-size: 10pt; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .site-shell { overflow: visible; }
+      .topbar, footer, .closing-card .button { display: none !important; }
+      .hero { min-height: 188mm; break-after: page; padding: 18mm 12mm; grid-template-columns: minmax(0,1.3fr) minmax(72mm,.7fr); gap: 11mm; align-items: center; }
+      .hero h1 { font-size: 16mm; }
+      .hero-copy > p { font-size: 4.5mm; }
+      .hero-summary { padding: 6mm; }
+      .hero-summary h2 { font-size: 12mm; }
+      .content-section { padding: 7mm 9mm; break-before: page; }
+      .section-heading { flex-direction: row; gap: 4mm; margin-bottom: 5mm; }
+      .section-number { width: 11mm; height: 11mm; }
+      .section-heading h2 { font-size: 8mm; }
+      .section-heading p { margin-top: 2mm; font-size: 9pt; }
+      .lead { font-size: 11pt; }
+      .split { grid-template-columns: minmax(0,1.2fr) minmax(70mm,.8fr); gap: 6mm; }
+      .mini-grid, .scope-grid, .plan-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .step-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
+      .service-grid, .alt-grid, .conditions-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .extras-layout, .ip-layout { grid-template-columns: minmax(0,1.1fr) minmax(70mm,.9fr); }
+      .mini-card, .scope-card, .step-card, .service-card, .alt-card, .condition-card { padding: 4mm; }
+      .scope-card, .step-card { min-height: 0; }
+      .scope-card h3, .step-card h3 { margin-top: 2mm; font-size: 13pt; }
+      .scope-card p, .step-card p, .mini-card p, .service-card p, .alt-card p, .condition-card p { font-size: 8pt; }
+      .section-subhead { margin: 5mm 0 3mm; font-size: 17pt; }
+      .plan-card { padding: 5mm; }
+      .plan-card h3 { font-size: 18pt; }
+      .plan-price { margin: 3mm 0; padding-bottom: 3mm; }
+      .plan-price strong { font-size: 26pt; }
+      .plan-clp { margin: -1mm 0 3mm; font-size: 7pt; }
+      .plan-note { padding-top: 3mm; }
+      .saas-section .section-subhead { break-before: page; margin-top: 0; }
+      .clean-list { gap: 1.5mm; }
+      .clean-list li, .body-copy, .statement p { font-size: 8.5pt; }
+      .price-strip { padding: 5mm; }
+      .price-strip strong { font-size: 19pt; }
+      .accent-band, .statement, .extras-card, .rate-card, .ip-card, .ip-callout { padding: 5mm; }
+      .comparison-table th, .comparison-table td { padding: 3mm; font-size: 8pt; }
+      .comparison-table { min-width: 0; }
+      .table-wrap { overflow: visible; }
+      .closing-card { box-shadow: none; }
+      .mini-card, .scope-card, .step-card, .plan-card, .service-card, .alt-card, .condition-card, .extras-card, .rate-card, .ip-card, .ip-callout, .comparison-table tr, .closing-card { break-inside: avoid; }
+      p, li { orphans: 3; widows: 3; }
+    }
+  </style>
+</head>
+<body>
+  <main class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img" aria-label="Símbolo AtomDev"><circle cx="24" cy="24" r="21" fill="none" stroke="#5f6062" stroke-width="1.8"/><ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8"/><ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(52 24 24)"/><ellipse cx="24" cy="24" rx="8" ry="20" fill="none" stroke="#5f6062" stroke-width="1.8" transform="rotate(-52 24 24)"/><circle cx="24" cy="24" r="5.4" fill="#08aabd"/><circle cx="29.8" cy="8.8" r="2.6" fill="#08aabd"/><circle cx="10.5" cy="22.5" r="2.6" fill="#ff0a5c"/><circle cx="35.5" cy="35.5" r="2.6" fill="#ff0a5c"/></svg></span>
+        <span><strong>AtomDev</strong><small>Propuesta económica</small></span>
+      </a>
+      <div class="top-actions">
+        <nav class="top-nav" aria-label="Secciones de la propuesta"><a href="#solucion">Solución</a><a href="#implementacion">Implementación</a><a href="#saas">SaaS</a><a href="#comparacion">Comparación</a><a href="#condiciones">Condiciones</a></nav>
+        <button class="button button-ghost" id="download-html-button" type="button" title="Descarga una copia para consultar sin conexión">Descargar web</button>
+        <button class="button button-primary" id="print-button" type="button" title="En la ventana de impresión selecciona Guardar como PDF">Descargar PDF</button>
+      </div>
+    </header>
+
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <span class="eyebrow">PROPUESTA ECONÓMICA PRELIMINAR · ATOMDEV · SECTOR MINERO</span>
+        <h1 id="hero-title">Inspección de activos preparada para la operación en terreno.</h1>
+        <p>Plataforma especializada para planificar, ejecutar y trazar trabajos de inspección y mantenimiento de activos eléctricos y mineros, incluso sin conectividad.</p>
+        <div class="hero-tags"><span>Multiempresa</span><span>Jerarquía de activos</span><span>Formularios dinámicos</span><span>Operación offline</span><span>Sincronización incremental</span></div>
+      </div>
+      <aside class="hero-summary" aria-label="Resumen de valores referenciales">
+        <span>Modelo recomendado</span>
+        <h2>SaaS <em>por faena</em></h2>
+        <small>derecho de uso · contrato mínimo de 12 meses</small>
+        <div class="hero-rule"></div>
+        <p><strong>Activación estándar incluida</strong> cuando el cliente configura sus activos y formularios con guía de AtomDev.<br><strong>20 UF/mes</strong> por faena (≈ $821.000), o <strong>205 UF/año</strong> (≈ $701.000 mensuales equivalentes) con contratación anual.</p>
+      </aside>
+    </section>
+
+    <section class="content-section" id="resumen" aria-labelledby="resumen-title">
+      <div class="section-heading"><span class="section-number">01</span><div><span class="section-kicker">VISIÓN EJECUTIVA</span><h2 id="resumen-title">Resumen ejecutivo.</h2><p>Una base tecnológica especializada para escalar las inspecciones desde una faena hacia una operación con múltiples minas.</p></div></div>
+      <div class="split">
+        <div><p class="lead">AtomDev propone licenciar una plataforma configurable para el control de trabajos sobre activos industriales. La suscripción considera la <strong>solución tecnológica, su evolución estándar y la activación básica</strong> para comenzar a utilizarla.</p><p class="body-copy">El modelo recomendado es SaaS por faena. El cliente carga sus activos y configura sus formularios con guía de AtomDev. La plataforma conserva una estructura multiempresa, soporta jerarquías de activos y permite registrar evidencia en terreno para sincronizarla posteriormente con el servidor.</p></div>
+        <aside class="statement"><b>OBJETIVO DE LA PROPUESTA</b><p>Establecer una base económica y funcional para contratar el derecho de uso de la plataforma, definir la activación inicial y acordar un camino de crecimiento por faenas, usuarios y necesidades de integración.</p></aside>
+      </div>
+      <div class="mini-grid"><div class="mini-card"><strong>Configurabilidad</strong><p>Tipos de activos y trabajos, variables analógicas, digitales o de texto y formularios dinámicos.</p></div><div class="mini-card"><strong>Trazabilidad</strong><p>Mediciones, observaciones, comentarios y fotografías asociados al activo específico.</p></div><div class="mini-card"><strong>Continuidad en terreno</strong><p>Descarga previa de la faena, ejecución offline y sincronización Push/Pull incremental.</p></div></div>
+    </section>
+
+    <section class="content-section solution-section" id="solucion" aria-labelledby="solucion-title">
+      <div class="section-heading"><span class="section-number">02</span><div><span class="section-kicker">SOLUCIÓN Y CAPACIDADES</span><h2 id="solucion-title">Descripción general de la solución.</h2><p>La plataforma conecta la estructura de activos, la definición del trabajo y la evidencia levantada en terreno.</p></div></div>
+      <h3 class="section-subhead">Alcance funcional actual</h3>
+      <div class="scope-grid">
+        <article class="scope-card"><span>01</span><h3>Operación multiempresa</h3><p>Gestión de empresas o tenants, minas y faenas dentro de una arquitectura preparada para crecer.</p></article>
+        <article class="scope-card"><span>02</span><h3>Activos jerárquicos</h3><p>Registro de subestaciones, transformadores, radiadores, ventiladores, bushings y otros componentes con sus relaciones.</p></article>
+        <article class="scope-card"><span>03</span><h3>Configuración flexible</h3><p>Tipos de activo, tipos de trabajo, conceptos y variables de inspección analógicas, digitales o de texto.</p></article>
+        <article class="scope-card"><span>04</span><h3>Trabajos y formularios</h3><p>Formularios dinámicos por tipo de trabajo; creación y ejecución de trabajos sobre activos.</p></article>
+        <article class="scope-card"><span>05</span><h3>Evidencia vinculada</h3><p>Respuestas, comentarios, observaciones y fotografías vinculados al activo que corresponde, incluso si es un componente hijo.</p></article>
+        <article class="scope-card"><span>06</span><h3>Trabajo sin conexión</h3><p>Descarga anticipada de una faena al dispositivo y sincronización incremental Push/Pull al recuperar conectividad.</p></article>
+      </div>
+      <div class="accent-band"><strong>Inspección de activos hijos desde un trabajo padre.</strong> Un trabajo realizado sobre un activo principal puede incorporar conceptos de componentes hijos sin exigir un trabajo independiente para cada uno; cada respuesta conserva su asociación con el activo correspondiente.</div>
+    </section>
+
+    <section class="content-section implementation-section" id="implementacion" aria-labelledby="implementacion-title">
+      <div class="section-heading"><span class="section-number">03</span><div><span class="section-kicker">PUESTA EN MARCHA</span><h2 id="implementacion-title">Activación y configuración inicial.</h2><p>El cliente realiza la carga y configuración de su operación con la guía inicial de AtomDev.</p></div></div>
+      <div class="step-grid">
+        <article class="step-card"><span>01</span><h3>Habilitación</h3><p>AtomDev habilita el acceso a la plataforma, la primera faena contratada y una cuenta administradora.</p></article>
+        <article class="step-card"><span>02</span><h3>Configuración del cliente</h3><p>El cliente incorpora activos, tipos de trabajo, conceptos, formularios, usuarios y perfiles.</p></article>
+        <article class="step-card"><span>03</span><h3>Guía inicial</h3><p>AtomDev orienta la configuración estándar y el uso de las funciones de terreno, trabajo offline y sincronización.</p></article>
+        <article class="step-card"><span>04</span><h3>Inicio de operación</h3><p>El cliente valida sus datos y formularios antes de iniciar sus trabajos. El soporte estándar continúa según el plan contratado.</p></article>
+      </div>
+      <div class="price-strip"><div><small>ACTIVACIÓN ESTÁNDAR</small><strong>Incluida</strong></div><p>No se aplica un cargo inicial obligatorio cuando el cliente realiza la carga y configuración con guía de AtomDev. Si se requiere que AtomDev prepare datos, configure formularios en volumen, migre información o realice capacitación especial, ese trabajo se dimensiona y cotiza por separado.</p></div>
+    </section>
+
+    <section class="content-section saas-section" id="saas" aria-labelledby="saas-title">
+      <div class="section-heading"><span class="section-number">04</span><div><span class="section-kicker">MODELO COMERCIAL RECOMENDADO</span><h2 id="saas-title">Licenciamiento SaaS.</h2><p>Derecho de uso durante la vigencia contractual, con una base por faena y capacidad de crecimiento según la operación.</p></div></div>
+      <div class="plan-grid" aria-label="Tabla de planes SaaS">
+        <article class="plan-card featured"><small>PLAN BASE · REFERENCIA</small><h3>Plan Faena</h3><div class="plan-price"><strong>20 UF</strong><span>/ mes</span></div><span class="plan-clp">≈ $821.000 mensuales</span><ul class="clean-list"><li>1 faena o mina</li><li>Hasta 10 usuarios operativos</li><li>Activación estándar incluida</li><li>Acceso web y/o PWA, operación offline y sincronización</li></ul><p class="plan-note">Contratación anual: <strong>205 UF por faena y año</strong> (≈ $701.000 mensuales equivalentes), facturados anualmente.</p></article>
+        <article class="plan-card"><small>MAYOR CAPACIDAD</small><h3>Plan Faena Pro</h3><div class="plan-price"><strong>30 UF</strong><span>/ mes</span></div><span class="plan-clp">≈ $1.231.000 mensuales</span><ul class="clean-list"><li>1 faena o mina</li><li>Hasta 20 usuarios operativos</li><li>Capacidades base de la plataforma</li><li>Dimensionamiento según uso acordado</li></ul><p class="plan-note">Condiciones anuales y recursos asociados, a definir en la negociación.</p></article>
+        <article class="plan-card"><small>EXPANSIÓN CORPORATIVA</small><h3>Enterprise</h3><div class="plan-price"><strong>A cotizar</strong></div><span class="plan-clp">Valor según alcance acordado</span><ul class="clean-list"><li>Múltiples faenas</li><li>Usuarios y almacenamiento por dimensionar</li><li>Infraestructura según necesidad</li><li>Cotización según alcance consolidado</li></ul><p class="plan-note">Precio y condiciones a conversar según faenas, usuarios y necesidades operativas.</p></article>
+      </div>
+      <p class="saas-footnote">Valores preliminares en UF y base para negociación. Equivalencias en pesos calculadas con la UF de <strong>$41.040,82</strong> del 28 de septiembre de 2026, publicada por el <a href="https://www.sii.cl/valores_y_fechas/uf/uf2026.htm" target="_blank" rel="noopener noreferrer">SII</a>; variarán con la UF vigente al facturar. El Plan Faena considera un contrato mínimo de 12 meses. Las capacidades definitivas de cada plan se documentarán en el contrato.</p>
+      <h3 class="section-subhead">Servicios incluidos en la licencia base</h3>
+      <div class="service-grid">
+        <article class="service-card"><h3>Operación de la plataforma</h3><ul class="clean-list"><li>Derecho de uso de la plataforma para la faena contratada</li><li>Activación estándar y guía inicial para configuración autónoma</li><li>Acceso web y/o PWA</li><li>Operación offline y sincronización de información</li><li>Actualizaciones estándar de la plataforma</li></ul></article>
+        <article class="service-card"><h3>Continuidad del servicio</h3><ul class="clean-list"><li>Mantenimiento correctivo de la plataforma estándar</li><li>Respaldo de información</li><li>Soporte estándar, según condiciones contractuales</li><li>Capacidad razonable para fotografías y documentos, a definir según uso e infraestructura contratada</li></ul></article>
+      </div>
+    </section>
+
+    <section class="content-section extras-section" id="adicionales" aria-labelledby="adicionales-title">
+      <div class="section-heading"><span class="section-number">05</span><div><span class="section-kicker">EVOLUCIÓN A MEDIDA</span><h2 id="adicionales-title">Servicios no incluidos y desarrollos adicionales.</h2><p>Las necesidades específicas del cliente se dimensionan y cotizan por separado antes de su ejecución.</p></div></div>
+      <div class="extras-layout">
+        <article class="extras-card"><h3>Fuera del SaaS base</h3><ul class="clean-list"><li>Carga, limpieza o migración de datos realizada por AtomDev</li><li>Configuración masiva de activos y formularios por AtomDev</li><li>Capacitación o acompañamiento especial</li><li>Integraciones con SAP u otros ERP y sistemas externos</li><li>Nuevos módulos y funcionalidades exclusivas del cliente</li><li>Reportería avanzada específica</li><li>Desarrollos especiales</li></ul></article>
+        <aside class="rate-card"><small>TARIFA DE REFERENCIA</small><strong>1,25–1,5 UF/h</strong><p>Los servicios y desarrollos adicionales podrán contratarse por horas, con estimación y aprobación previas, o mediante proyectos a precio cerrado. Alcance, entregables, plazos y condiciones se definirán en cada cotización.</p></aside>
+      </div>
+    </section>
+
+    <section class="content-section ip-section" id="propiedad" aria-labelledby="propiedad-title">
+      <div class="section-heading"><span class="section-number">06</span><div><span class="section-kicker">DERECHOS SOBRE LA SOLUCIÓN</span><h2 id="propiedad-title">Propiedad intelectual.</h2><p>El modelo SaaS otorga al cliente el uso de una plataforma especializada durante la vigencia del contrato.</p></div></div>
+      <div class="ip-layout"><article class="ip-card"><h3>Marco comercial propuesto</h3><p>La propiedad intelectual de la plataforma corresponde a AtomDev. El cliente adquiere un derecho de uso en los términos, alcance y plazo establecidos en el contrato.</p><ul class="clean-list"><li>Las funcionalidades estándar, el framework, la arquitectura, los componentes reutilizables y el código fuente permanecen como propiedad de AtomDev.</li><li>El código fuente no forma parte del servicio SaaS.</li><li>La titularidad y el uso de los datos del cliente se regularán expresamente en el contrato.</li></ul></article><aside class="ip-callout"><b>ALCANCE DE LA LICENCIA</b><p>El precio recurrente remunera el <strong>uso de la plataforma y su operación estándar</strong>. Cualquier cesión de código fuente o de derechos de propiedad intelectual requiere una negociación y un instrumento específicos.</p></aside></div>
+    </section>
+
+    <section class="content-section alternatives-section" id="alternativas" aria-labelledby="alternativas-title">
+      <div class="section-heading"><span class="section-number">07</span><div><span class="section-kicker">OPCIONES A EVALUAR</span><h2 id="alternativas-title">Alternativas de contratación.</h2><p>El SaaS es el modelo recomendado. Estas opciones pueden estudiarse si la estrategia de adquisición del cliente requiere otra estructura.</p></div></div>
+      <div class="alt-grid"><article class="alt-card"><small>ALTERNATIVA 01</small><h3>Licencia perpetua</h3><span class="alt-price">≈ 1.100 UF</span><p>Derecho de uso indefinido de la versión adquirida. AtomDev conserva la propiedad intelectual.</p><ul class="clean-list"><li>Soporte y mantenimiento anual adicionales: entre 15% y 20% del valor de la licencia.</li><li>Alcance de instalación, infraestructura, actualizaciones y soporte sujeto a definición contractual.</li></ul></article><article class="alt-card"><small>ALTERNATIVA 02</small><h3>Adquisición de software o código fuente</h3><span class="alt-price">2.000–2.500 UF</span><p>Referencia inicial sujeta a la extensión de los derechos efectivamente transferidos.</p><ul class="clean-list"><li>La eventual cesión de propiedad intelectual y la exclusividad requieren definición expresa.</li><li>Documentación, soporte y transferencia tecnológica se dimensionan en la negociación.</li></ul></article></div>
+    </section>
+
+    <section class="content-section comparison-section" id="comparacion" aria-labelledby="comparacion-title">
+      <div class="section-heading"><span class="section-number">08</span><div><span class="section-kicker">ESCENARIOS REFERENCIALES</span><h2 id="comparacion-title">Comparación económica.</h2><p>Escenario simple de una faena para visualizar órdenes de magnitud; no constituye una cotización definitiva.</p></div></div>
+      <div class="table-wrap"><table class="comparison-table"><thead><tr><th scope="col">Modelo</th><th scope="col">Cargo inicial base</th><th scope="col">Año 1</th><th scope="col">Año 2</th><th scope="col">Año 3</th><th scope="col">Total 3 años</th></tr></thead><tbody><tr><td>SaaS · pago mensual</td><td>0 UF</td><td>240 UF</td><td>240 UF</td><td>240 UF</td><td>720 UF</td></tr><tr><td>SaaS · pago anual</td><td>0 UF</td><td>205 UF</td><td>205 UF</td><td>205 UF</td><td>615 UF</td></tr><tr><td>Licencia perpetua</td><td>≈ 1.100 UF licencia</td><td colspan="4">Soporte y mantenimiento anual adicional de 15%–20% del valor de la licencia; implementación e infraestructura a definir.</td></tr><tr><td>Adquisición</td><td>2.000–2.500 UF</td><td colspan="4">Alcance de cesión, soporte, documentación y transferencia sujeto a negociación específica.</td></tr></tbody></table></div>
+      <p class="table-note">Escenario SaaS base para una faena y hasta 10 usuarios operativos, con activación incluida y carga de datos a cargo del cliente: 12 × 20 = 240 UF por año, o 205 UF por año con contratación anual. Los totales de tres años son 720 UF y 615 UF, respectivamente. Se excluyen servicios profesionales adicionales y variaciones de plan, faenas o usuarios.</p>
+    </section>
+
+    <section class="content-section conditions-section" id="condiciones" aria-labelledby="condiciones-title">
+      <div class="section-heading"><span class="section-number">09</span><div><span class="section-kicker">BASE PARA NEGOCIACIÓN</span><h2 id="condiciones-title">Supuestos y condiciones comerciales.</h2><p>Los parámetros operativos y contractuales se ajustarán después del levantamiento y antes de la contratación.</p></div></div>
+      <div class="conditions-grid">
+        <article class="condition-card"><h3>Supuestos</h3><ul class="clean-list"><li>La referencia económica parte de una faena y hasta 10 usuarios operativos en Plan Faena.</li><li>El cliente prepara y carga sus activos, tipos de trabajo, conceptos, formularios y usuarios con guía inicial de AtomDev.</li><li>El cliente valida la calidad y estructura de sus datos antes de comenzar la operación.</li><li>El alcance definitivo de infraestructura, almacenamiento y respaldo se acordará según uso esperado.</li></ul></article>
+        <article class="condition-card"><h3>Condiciones comerciales</h3><ul class="clean-list"><li>Los precios se expresan en UF; las cifras en pesos son equivalencias referenciales al 28 de septiembre de 2026.</li><li>El Plan Faena contempla un plazo contractual mínimo de 12 meses.</li><li>Los precios pueden ajustarse por cantidad de faenas, usuarios, almacenamiento y requerimientos de infraestructura.</li><li>Canales de soporte, horarios, niveles de servicio y eventuales compromisos de disponibilidad se definirán en el contrato.</li></ul></article>
+        <article class="condition-card"><h3>Forma de pago propuesta</h3><ul class="clean-list"><li>La activación estándar no tiene cobro inicial adicional.</li><li>SaaS mensual: facturación mensual anticipada.</li><li>Contratación anual: facturación anual anticipada.</li><li>Los servicios profesionales opcionales se facturarán según la cotización acordada.</li></ul></article>
+        <article class="condition-card"><h3>Vigencia de la propuesta</h3><p>Versión revisada el <strong>29 de septiembre de 2026</strong>, con vigencia referencial de <strong>30 días corridos</strong>. Valores, alcance y condiciones están sujetos a validación comercial y técnica antes de su aceptación formal.</p><p>Las condiciones definitivas se documentarán en la propuesta final y en el contrato correspondiente.</p></article>
+      </div>
+    </section>
+
+    <section class="content-section closing-section" id="cierre" aria-labelledby="cierre-title">
+      <div class="closing-card"><div><span class="section-kicker">PRÓXIMOS PASOS</span><h2 id="cierre-title">Ajustemos la propuesta a la operación minera real.</h2><p>La siguiente etapa es validar el número de faenas y usuarios, la estructura de activos, los formularios prioritarios y las condiciones de infraestructura y soporte. Con esa información se puede emitir una propuesta final de licenciamiento y, solo si es necesario, una cotización de servicios adicionales.</p><ol class="next-list"><li><b>01</b> Demostración funcional con un caso real del cliente.</li><li><b>02</b> Validación de la carga autónoma y del plan comercial.</li><li><b>03</b> Contratación SaaS y activación de la primera faena.</li></ol></div><button class="button button-primary" id="print-from-close" type="button">Descargar PDF</button></div>
+    </section>
+    <footer><div><strong>AtomDev · Propuesta económica para el sector minero</strong><span>Versión revisada · 29 de septiembre de 2026 · Valores referenciales en UF</span></div><p>Documento de trabajo para acordar alcance, precios y condiciones definitivas de la solución.</p></footer>
+  </main>
+  <script>
+    function downloadWebProposal() {
+      const html = '<!doctype html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'propuesta-trabajo-atomdev-minera.html';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function printProposal() { window.print(); }
+    document.getElementById('download-html-button').addEventListener('click', downloadWebProposal);
+    document.getElementById('print-button').addEventListener('click', printProposal);
+    document.getElementById('print-from-close').addEventListener('click', printProposal);
+  </script>
+</body>
+</html>
